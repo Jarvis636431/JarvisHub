@@ -1,0 +1,12 @@
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .glow-card {
+    @apply rounded-3xl border border-slate-600/30 bg-slate-900/70 shadow-[0_24px_48px_rgba(15,23,42,0.45)];
+  }
+
+  .link-soft {
+    @apply text-slate-300 transition-colors duration-200 hover:text-white;
+  }
+}
