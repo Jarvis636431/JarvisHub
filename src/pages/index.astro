@@ -1,5 +1,6 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import { getCollection } from "astro:content";
 
 type NavLink = { href: string; label: string };
 type FocusArea = { title: string; description: string };
@@ -17,8 +18,8 @@ const navLinks: NavLink[] = [
   { href: '#hero', label: 'Home' },
   { href: '#about', label: 'About' },
   { href: '#focus', label: 'Focus' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#writing', label: 'Writing' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Writing' },
   { href: '#contact', label: 'Contact' },
 ];
 
@@ -37,50 +38,61 @@ const focusAreas: FocusArea[] = [
   },
 ];
 
-const projectHighlights: ProjectHighlight[] = [
-  {
-    title: 'Nebula Studio',
-    description: 'A modular design system powering a multi-brand SaaS platform with adaptive theming and accessibility baked-in.',
-    stack: ['Astro', 'React', 'Tailwind', 'Storybook'],
-    linkLabel: 'Read the story',
-    link: '#',
-  },
-  {
-    title: 'Orbit Journal',
-    description: 'Personal knowledge garden that turns Markdown notes into a graph-based exploration interface.',
-    stack: ['Astro', 'D3.js', 'Content Collections'],
-    linkLabel: 'View prototype',
-    link: '#',
-  },
-  {
-    title: 'Pulse Dashboard',
-    description: 'Realtime status board for engineering teams with live incident updates, alerting, and automated post-mortems.',
-    stack: ['Astro', 'SolidJS', 'Supabase'],
-    linkLabel: 'Case study',
-    link: '#',
-  },
-];
+const draftFilter = ({ data }: { data: { draft?: boolean } }) =>
+  import.meta.env.DEV ? true : data.draft !== true;
 
-const writingList: WritingEntry[] = [
-  {
-    title: 'Building a Creative Playground with Astro Islands',
-    description: 'How I combine Astro server islands with interactive shaders to tell product stories.',
-    date: 'Jan 12 - 7 min read',
-    link: '#',
-  },
-  {
-    title: 'Design Tokens in the Real World',
-    description: 'Lessons learned shipping cross-platform design systems and keeping designers + engineers aligned.',
-    date: 'Dec 28 - 6 min read',
-    link: '#',
-  },
-  {
-    title: 'Curating a Personal Knowledge Base',
-    description: 'Strategies for staying curious, building better notes, and turning research into shareable insights.',
-    date: 'Dec 10 - 8 min read',
-    link: '#',
-  },
-];
+const postsCollection = await getCollection("blog", draftFilter);
+const sortedPosts = postsCollection
+  .slice()
+  .sort(
+    (a, b) =>
+      new Date(b.data.publishDate).getTime() -
+      new Date(a.data.publishDate).getTime()
+  );
+
+const writingList: WritingEntry[] = sortedPosts.slice(0, 3).map((entry) => {
+  const publishDate = new Date(entry.data.publishDate);
+  const month = publishDate.toLocaleDateString("en-US", {
+    month: "short",
+  });
+  const day = publishDate
+    .toLocaleDateString("en-US", {
+      day: "2-digit",
+    })
+    .replace(/^0/, "");
+  const readingTime = entry.data.readingTime ?? 6;
+  return {
+    title: entry.data.title,
+    description: entry.data.description,
+    date: `${month} ${day} - ${readingTime} min read`,
+    link: `/blog/${entry.slug}`,
+  };
+});
+
+const projectsCollection = await getCollection("projects", ({ data }) =>
+  import.meta.env.DEV ? true : data.status !== "archived"
+);
+
+const sortedProjects = projectsCollection
+  .slice()
+  .sort(
+    (a, b) =>
+      new Date(b.data.publishDate).getTime() -
+      new Date(a.data.publishDate).getTime()
+  );
+
+const featured = sortedProjects.filter(({ data }) => data.featured);
+const sourceProjects = featured.length > 0 ? featured : sortedProjects;
+
+const projectHighlights: ProjectHighlight[] = sourceProjects
+  .slice(0, 3)
+  .map((entry) => ({
+    title: entry.data.title,
+    description: entry.data.summary,
+    stack: entry.data.stack,
+    linkLabel: entry.data.externalUrl ? "View project" : "Case study",
+    link: entry.data.externalUrl ?? `/projects/${entry.slug}`,
+  }));
 
 const quickStats: QuickStat[] = [
   { label: 'Years in build mode', value: '6+' },
@@ -107,8 +119,8 @@ const footerNote = `Copyright ${new Date().getFullYear()} Jarvis Hub. Built with
           Currently exploring the intersection of design systems, creative coding, and thoughtful storytelling.
         </p>
         <div class="hero__actions">
-          <a class="action action--primary" href="#projects">Explore my work</a>
-          <a class="action action--ghost" href="#writing">Read my writing</a>
+          <a class="action action--primary" href="/projects">Explore my work</a>
+          <a class="action action--ghost" href="/blog">Read my writing</a>
         </div>
         <div class="hero__stats">
           {quickStats.map(({ label, value }) => (
@@ -194,7 +206,7 @@ const footerNote = `Copyright ${new Date().getFullYear()} Jarvis Hub. Built with
     <div class="section__label">Writing</div>
     <div class="section__header">
       <h2 class="section__title">Latest notes & essays</h2>
-      <a class="section__link" href="#blog">Browse the archive</a>
+      <a class="section__link" href="/blog">Browse the archive</a>
     </div>
     <div class="writing-list">
       {writingList.map(({ title, description, date, link }) => (

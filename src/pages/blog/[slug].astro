@@ -1,0 +1,176 @@
+---
+import Layout from "@layouts/Layout.astro";
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection(
+    "blog",
+    ({ data }) => (import.meta.env.DEV ? true : data.draft !== true)
+  );
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props as { post: CollectionEntry<"blog"> };
+const { Content } = await post.render();
+
+const publishDate = new Date(post.data.publishDate).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+const readingTime = post.data.readingTime ?? 6;
+---
+
+<Layout
+  title={`${post.data.title} - Jarvis Hub`}
+  description={post.data.description}
+>
+  <article class="post">
+    <header class="post__hero">
+      <a class="post__breadcrumb" href="/blog">← Back to all writing</a>
+      <p class="post__meta">
+        <span>{publishDate}</span>
+        <span>•</span>
+        <span>{readingTime} min read</span>
+      </p>
+      <h1>{post.data.title}</h1>
+      <p class="post__description">{post.data.description}</p>
+      {post.data.tags.length > 0 && (
+        <ul class="post__tags">
+          {post.data.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      )}
+      {post.data.heroImage && (
+        <img
+          class="post__hero-image"
+          src={post.data.heroImage}
+          alt={post.data.title}
+          loading="lazy"
+        />
+      )}
+    </header>
+
+    <div class="post__content">
+      <Content />
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .post {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 840px;
+  }
+
+  .post__breadcrumb {
+    color: rgba(148, 163, 184, 0.85);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .post__breadcrumb:hover {
+    color: #f8fafc;
+  }
+
+  .post__meta {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(148, 163, 184, 0.85);
+    font-size: 0.9rem;
+  }
+
+  .post__hero h1 {
+    margin: 0;
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+  }
+
+  .post__description {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: rgba(203, 213, 225, 0.9);
+    max-width: 720px;
+  }
+
+  .post__tags {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .post__tags li {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+  }
+
+  .post__hero-image {
+    width: 100%;
+    border-radius: 24px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(11, 16, 32, 0.6);
+  }
+
+  .post__content {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    line-height: 1.75;
+    color: rgba(226, 232, 240, 0.95);
+  }
+
+  .post__content h2,
+  .post__content h3,
+  .post__content h4 {
+    margin-top: 2.2em;
+    margin-bottom: 0.8em;
+  }
+
+  .post__content p {
+    margin: 0 0 1em;
+  }
+
+  .post__content ul,
+  .post__content ol {
+    padding-left: 1.4em;
+    margin: 0 0 1em;
+  }
+
+  .post__content blockquote {
+    margin: 0 0 1.4em;
+    padding-left: 1em;
+    border-left: 3px solid rgba(99, 102, 241, 0.6);
+    color: rgba(203, 213, 225, 0.85);
+  }
+
+  .post__content code {
+    background: rgba(15, 23, 42, 0.9);
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.95em;
+  }
+
+  @media (max-width: 640px) {
+    .post__hero {
+      gap: 14px;
+    }
+
+    .post__content {
+      gap: 14px;
+    }
+  }
+</style>
