@@ -3,11 +3,10 @@ import Layout from "@layouts/Layout.astro";
 import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 
-const filterProjects = ({ data }: CollectionEntry<"projects">) =>
-  import.meta.env.DEV ? true : data.status !== "archived";
-
 export async function getStaticPaths() {
-  const projects = await getCollection("projects", filterProjects);
+  const projects = await getCollection("projects", ({ data }) =>
+    import.meta.env.DEV ? true : data.status !== "archived"
+  );
   return projects.map((project) => ({
     params: { slug: project.slug },
     props: { project },
@@ -28,11 +27,68 @@ const updatedDate = project.data.updatedDate
       month: "long",
     })
   : undefined;
+
+const publishDateIso = new Date(project.data.publishDate).toISOString();
+const updatedDateIso = project.data.updatedDate
+  ? new Date(project.data.updatedDate).toISOString()
+  : undefined;
+
+const siteOrigin = Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
+const canonicalUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+const coverImageUrl = project.data.coverImage
+  ? new URL(project.data.coverImage, siteOrigin).toString()
+  : undefined;
+
+const projectStructuredData: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  name: project.data.title,
+  description: project.data.summary,
+  url: canonicalUrl,
+  mainEntityOfPage: canonicalUrl,
+  datePublished: publishDateIso,
+  dateModified: updatedDateIso ?? publishDateIso,
+  inLanguage: "en-US",
+  creator: {
+    "@type": "Person",
+    name: "Jarvis Hub",
+  },
+};
+
+if (project.data.roles.length > 0) {
+  projectStructuredData.about = project.data.roles.join(", ");
+}
+
+if (project.data.stack.length > 0) {
+  projectStructuredData.keywords = project.data.stack.join(", ");
+}
+
+if (coverImageUrl) {
+  projectStructuredData.image = [coverImageUrl];
+}
+
+if (project.data.externalUrl) {
+  projectStructuredData.sameAs = [project.data.externalUrl];
+}
 ---
 
 <Layout
   title={`${project.data.title} - Jarvis Hub`}
   description={project.data.summary}
+  seo={{
+    canonical: canonicalUrl,
+    type: "article",
+    image: project.data.coverImage
+      ? {
+          src: project.data.coverImage,
+          alt: project.data.title,
+        }
+      : undefined,
+    publishedTime: publishDateIso,
+    modifiedTime: updatedDateIso,
+    tags: project.data.stack,
+    structuredData: projectStructuredData,
+  }}
 >
   <article class="project">
     <header class="project__hero">

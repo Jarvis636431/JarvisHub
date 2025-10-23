@@ -101,6 +101,19 @@ const quickStats: QuickStat[] = [
 ];
 
 const footerNote = `Copyright ${new Date().getFullYear()} Jarvis Hub. Built with Astro.`;
+
+const siteOrigin = Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
+const pageUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+
+const homeStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Jarvis Hub",
+  url: pageUrl,
+  description:
+    "Creative developer crafting immersive interfaces, thoughtful systems, and long-form notes on building for the web.",
+  inLanguage: "en-US",
+};
 ---
 
 <Layout
@@ -108,6 +121,14 @@ const footerNote = `Copyright ${new Date().getFullYear()} Jarvis Hub. Built with
   description="Creative developer crafting immersive interfaces, thoughtful systems, and long-form notes on building for the web."
   navLinks={navLinks}
   footerNote={footerNote}
+  seo={{
+    type: "website",
+    image: {
+      src: "/favicon.svg",
+      alt: "Jarvis Hub logomark",
+    },
+    structuredData: homeStructuredData,
+  }}
 >
   <section id="hero" class="hero">
     <div class="hero__badge">Creative developer / Design systems / Learning in public</div>

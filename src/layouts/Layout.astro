@@ -1,28 +1,121 @@
 ---
+import { SEO } from "astro-seo";
 import "../styles/global.css";
 
 type NavLink = { href: string; label: string };
+type StructuredData = Record<string, unknown> | Record<string, unknown>[];
+
+type TwitterConfig = {
+  card?: "summary" | "summary_large_image" | "player" | "app";
+  site?: string;
+  creator?: string;
+  image?: string;
+  imageAlt?: string;
+  title?: string;
+  description?: string;
+};
+
+interface SeoConfig {
+  canonical?: string;
+  type?: string;
+  image?: {
+    src: string;
+    alt?: string;
+  };
+  noindex?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  tags?: string[];
+  twitter?: TwitterConfig;
+  structuredData?: StructuredData;
+}
 
 interface LayoutProps {
   title?: string;
   description?: string;
   navLinks?: NavLink[];
   footerNote?: string;
+  seo?: SeoConfig;
 }
 
+const fallbackSite = "https://jarvishub.com";
+
 const {
-  title = 'Jarvis Hub - Creative Developer',
-  description = 'Personal website of Jarvis Hub - crafting web experiences, writing, and sharing experiments in code.',
+  title = "Jarvis Hub - Creative Developer",
+  description = "Personal website of Jarvis Hub - crafting web experiences, writing, and sharing experiments in code.",
   navLinks = [
-    { href: '#hero', label: 'Home' },
-    { href: '#about', label: 'About' },
-    { href: '#focus', label: 'Focus' },
-    { href: '/projects', label: 'Projects' },
-    { href: '/blog', label: 'Writing' },
-    { href: '#contact', label: 'Contact' },
+    { href: "#hero", label: "Home" },
+    { href: "#about", label: "About" },
+    { href: "#focus", label: "Focus" },
+    { href: "/projects", label: "Projects" },
+    { href: "/blog", label: "Writing" },
+    { href: "#contact", label: "Contact" },
   ],
-  footerNote = 'Built with Astro - Designed by Jarvis',
+  footerNote = "Built with Astro - Designed by Jarvis",
+  seo,
 } = Astro.props as LayoutProps;
+
+const requestUrl = Astro.url;
+const siteOrigin = Astro.site?.origin ?? requestUrl?.origin ?? fallbackSite;
+const canonical =
+  seo?.canonical ??
+  (requestUrl ? new URL(requestUrl.pathname, siteOrigin).toString() : undefined);
+
+const resolveUrl = (value: string) => {
+  try {
+    return new URL(value, siteOrigin).toString();
+  } catch {
+    return value;
+  }
+};
+
+const absoluteImage = seo?.image?.src ? resolveUrl(seo.image.src) : undefined;
+
+const articleData: Record<string, string | string[]> = {};
+if (seo?.publishedTime) {
+  articleData.publishedTime = seo.publishedTime;
+}
+if (seo?.modifiedTime) {
+  articleData.modifiedTime = seo.modifiedTime;
+}
+if (seo?.tags && seo.tags.length > 0) {
+  articleData.tags = seo.tags;
+}
+
+const openGraph =
+  absoluteImage && canonical
+    ? {
+        basic: {
+          title,
+          type: seo?.type ?? "website",
+          image: absoluteImage,
+          url: canonical,
+        },
+        optional: {
+          siteName: "Jarvis Hub",
+          description,
+        },
+        ...(Object.keys(articleData).length > 0 ? { article: articleData } : {}),
+      }
+    : undefined;
+
+const twitterBase: TwitterConfig = {
+  card: absoluteImage ? "summary_large_image" : "summary",
+  title,
+  description,
+};
+
+if (absoluteImage) {
+  twitterBase.image = absoluteImage;
+  twitterBase.imageAlt = seo?.image?.alt ?? title;
+}
+
+const twitterConfig = {
+  ...twitterBase,
+  ...(seo?.twitter ?? {}),
+};
+
+const structuredData = seo?.structuredData;
 ---
 
 <!doctype html>
@@ -32,8 +125,17 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
-    <title>{title}</title>
+    <SEO
+      title={title}
+      description={description}
+      canonical={canonical ?? undefined}
+      noindex={seo?.noindex}
+      openGraph={openGraph}
+      twitter={twitterConfig}
+    />
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

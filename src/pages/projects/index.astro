@@ -15,11 +15,31 @@ const projects = (await getCollection("projects", ({ data }) =>
 
 const featured = projects.filter(({ data }) => data.featured);
 const rest = projects.filter(({ data }) => !data.featured);
+
+const siteOrigin = Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
+const pageUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+
+const projectsStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Jarvis Hub Projects",
+  url: pageUrl,
+  description: "Selected client collaborations, experiments, and systems work.",
+  inLanguage: "en-US",
+};
 ---
 
 <Layout
   title="Projects - Jarvis Hub"
   description="Selected client collaborations, experiments, and systems work."
+  seo={{
+    type: "website",
+    image: {
+      src: "/favicon.svg",
+      alt: "Jarvis Hub logomark",
+    },
+    structuredData: projectsStructuredData,
+  }}
 >
   <article class="page">
     <header class="page__hero">

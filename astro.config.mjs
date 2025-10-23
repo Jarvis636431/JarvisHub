@@ -4,11 +4,14 @@ import image from "@astrojs/image";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
+import robotsTxt from "astro-robots-txt";
 import remarkGfm from "remark-gfm";
+
+const SITE_URL = "https://jarvishub.com";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://jarvishub.com",
+  site: SITE_URL,
   base: "/",
   trailingSlash: "never",
   integrations: [
@@ -18,6 +21,16 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
     image(),
+    robotsTxt({
+      policy: [
+        {
+          userAgent: "*",
+          allow: "/",
+        },
+      ],
+      sitemap: true,
+      host: true,
+    }),
   ],
   build: {
     assets: "_assets",

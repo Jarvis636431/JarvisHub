@@ -23,11 +23,66 @@ const publishDate = new Date(post.data.publishDate).toLocaleDateString("en-US", 
   day: "numeric",
 });
 const readingTime = post.data.readingTime ?? 6;
+
+const publishDateIso = new Date(post.data.publishDate).toISOString();
+const updatedDateIso = post.data.updatedDate
+  ? new Date(post.data.updatedDate).toISOString()
+  : undefined;
+
+const siteOrigin = Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
+const canonicalUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+const heroImageUrl = post.data.heroImage ? new URL(post.data.heroImage, siteOrigin).toString() : undefined;
+
+const articleStructuredData: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: publishDateIso,
+  dateModified: updatedDateIso ?? publishDateIso,
+  author: {
+    "@type": "Person",
+    name: "Jarvis Hub",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Jarvis Hub",
+    logo: {
+      "@type": "ImageObject",
+      url: new URL("/favicon.svg", siteOrigin).toString(),
+    },
+  },
+  mainEntityOfPage: canonicalUrl,
+  url: canonicalUrl,
+  inLanguage: "en-US",
+};
+
+if (heroImageUrl) {
+  articleStructuredData.image = [heroImageUrl];
+}
+
+if (post.data.tags.length > 0) {
+  articleStructuredData.keywords = post.data.tags.join(", ");
+}
 ---
 
 <Layout
   title={`${post.data.title} - Jarvis Hub`}
   description={post.data.description}
+  seo={{
+    canonical: canonicalUrl,
+    type: "article",
+    image: post.data.heroImage
+      ? {
+          src: post.data.heroImage,
+          alt: post.data.title,
+        }
+      : undefined,
+    publishedTime: publishDateIso,
+    modifiedTime: updatedDateIso,
+    tags: post.data.tags,
+    structuredData: articleStructuredData,
+  }}
 >
   <article class="post">
     <header class="post__hero">

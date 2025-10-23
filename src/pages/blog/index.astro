@@ -11,11 +11,32 @@ const posts = (await getCollection("blog", ({ data }) =>
       new Date(b.data.publishDate).getTime() -
       new Date(a.data.publishDate).getTime()
   );
+
+const siteOrigin = Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
+const pageUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+
+const blogStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "Jarvis Hub Writing",
+  url: pageUrl,
+  description:
+    "Long-form notes on design systems, creative development, and learning in public.",
+  inLanguage: "en-US",
+};
 ---
 
 <Layout
   title="Writing - Jarvis Hub"
   description="Long-form notes on design systems, creative development, and learning in public."
+  seo={{
+    type: "website",
+    image: {
+      src: "/favicon.svg",
+      alt: "Jarvis Hub logomark",
+    },
+    structuredData: blogStructuredData,
+  }}
 >
   <article class="page">
     <header class="page__hero">
