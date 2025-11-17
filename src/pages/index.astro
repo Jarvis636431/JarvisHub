@@ -16,8 +16,6 @@ type QuickStat = { label: string; value: string };
 
 const navLinks: NavLink[] = [
   { href: '#hero', label: 'Home' },
-  { href: '#about', label: 'About' },
-  { href: '#focus', label: 'Focus' },
   { href: '/projects', label: 'Projects' },
   { href: '/blog', label: 'Writing' },
   { href: '#contact', label: 'Contact' },
@@ -170,34 +168,7 @@ const homeStructuredData = {
     </div>
   </section>
 
-  <section id="about" class="section section--about">
-    <div class="section__label">About</div>
-    <div class="about__content">
-      <h2>Turning ideas into expressive, maintainable products.</h2>
-      <p>
-        I believe the best digital experiences emerge when craft meets systems thinking.
-        From early research to production delivery, I work closely with teams to align vision,
-        prototype with intent, and ship with confidence.
-      </p>
-      <p>
-        Off the clock, you'll find me exploring creative coding, collecting typography inspiration,
-        and documenting the lessons I learn along the way.
-      </p>
-    </div>
-  </section>
-
-  <section id="focus" class="section">
-    <div class="section__label">Focus</div>
-    <h2 class="section__title">What I'm focused on right now</h2>
-    <div class="card-grid">
-      {focusAreas.map(({ title, description }) => (
-        <article class="card card--focus">
-          <h3>{title}</h3>
-          <p>{description}</p>
-        </article>
-      ))}
-    </div>
-  </section>
+  
 
   <section id="projects" class="section">
     <div class="section__label">Projects</div>
@@ -551,9 +522,7 @@ const homeStructuredData = {
     letter-spacing: 0.04em;
   }
 
-  .card--focus {
-    background: rgba(17, 24, 48, 0.6);
-  }
+  
 
   .card-grid--projects {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -664,27 +633,7 @@ const homeStructuredData = {
     margin-top: 12px;
   }
 
-  .section--about {
-    gap: 18px;
-  }
-
-  .about__content {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    max-width: 720px;
-  }
-
-  .about__content h2 {
-    margin: 0;
-    font-size: clamp(2rem, 3vw, 2.6rem);
-  }
-
-  .about__content p {
-    margin: 0;
-    color: var(--text-secondary);
-    line-height: 1.7;
-  }
+  
 
   @media (max-width: 960px) {
     .hero__content {
