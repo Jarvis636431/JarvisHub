@@ -59,7 +59,9 @@ const requestUrl = Astro.url;
 const siteOrigin = Astro.site?.origin ?? requestUrl?.origin ?? fallbackSite;
 const canonical =
   seo?.canonical ??
-  (requestUrl ? new URL(requestUrl.pathname, siteOrigin).toString() : undefined);
+  (requestUrl
+    ? new URL(requestUrl.pathname, siteOrigin).toString()
+    : undefined);
 
 const resolveUrl = (value: string) => {
   try {
@@ -95,7 +97,9 @@ const openGraph =
           siteName: "Jarvis Hub",
           description,
         },
-        ...(Object.keys(articleData).length > 0 ? { article: articleData } : {}),
+        ...(Object.keys(articleData).length > 0
+          ? { article: articleData }
+          : {}),
       }
     : undefined;
 
@@ -123,8 +127,15 @@ const structuredData = seo?.structuredData;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0f172a" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Jarvis Hub – Writing"
+      href="/rss.xml"
+    />
     <SEO
       title={title}
       description={description}
@@ -133,9 +144,14 @@ const structuredData = seo?.structuredData;
       openGraph={openGraph}
       twitter={twitterConfig}
     />
-    {structuredData && (
-      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-    )}
+    {
+      structuredData && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(structuredData)}
+        />
+      )
+    }
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -144,20 +160,38 @@ const structuredData = seo?.structuredData;
     />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="site-header__inner">
         <a class="brand" href="/">
           <span class="brand__dot"></span>Jarvis Hub
         </a>
         <nav class="site-nav" aria-label="Primary navigation">
-          {navLinks.map(({ href, label }) => (
-            <a href={href}>{label}</a>
-          ))}
+          {navLinks.map(({ href, label }) => <a href={href}>{label}</a>)}
         </nav>
         <a class="header-cta" href="#contact">Let's talk</a>
+        <a
+          class="header-icon"
+          href="https://github.com/Jarvis636431"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+          <svg
+            aria-hidden="true"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M12 2C6.48 2 2 6.58 2 12.26c0 4.52 2.87 8.35 6.84 9.7.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.71-2.78.61-3.37-1.36-3.37-1.36-.45-1.17-1.11-1.48-1.11-1.48-.91-.63.07-.62.07-.62 1.01.07 1.54 1.06 1.54 1.06.9 1.57 2.37 1.12 2.95.86.09-.67.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.74-.1-.26-.45-1.32.1-2.75 0 0 .84-.27 2.75 1.05.8-.22 1.65-.33 2.5-.33s1.7.11 2.5.33c1.9-1.32 2.74-1.05 2.74-1.05.56 1.43.21 2.49.1 2.75.64.71 1.03 1.62 1.03 2.74 0 3.94-2.34 4.8-4.57 5.05.36.32.69.94.69 1.9 0 1.37-.01 2.48-.01 2.82 0 .26.18.58.69.48A10 10 0 0 0 22 12.26C22 6.58 17.52 2 12 2z"
+            ></path>
+          </svg>
+        </a>
       </div>
     </header>
-    <main class="site-main">
+    <main id="main" class="site-main">
       <slot />
     </main>
     <footer class="site-footer">
@@ -165,8 +199,16 @@ const structuredData = seo?.structuredData;
         <span>{footerNote}</span>
         <div class="footer-links">
           <a href="mailto:hello@jarvishub.com">Email</a>
-          <a href="https://github.com/JarvisHub" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a
+            href="https://github.com/Jarvis636431"
+            target="_blank"
+            rel="noopener noreferrer">GitHub</a
+          >
+          <a
+            href="https://www.linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer">LinkedIn</a
+          >
         </div>
       </div>
     </footer>
@@ -205,8 +247,19 @@ const structuredData = seo?.structuredData;
 
   body {
     margin: 0;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: radial-gradient(180% 120% at 50% 10%, #1f284a 0%, #050712 55%, #02040a 100%);
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+    background: radial-gradient(
+      180% 120% at 50% 10%,
+      #1f284a 0%,
+      #050712 55%,
+      #02040a 100%
+    );
     color: var(--text-primary);
     min-height: 100vh;
     display: flex;
@@ -214,17 +267,25 @@ const structuredData = seo?.structuredData;
   }
 
   body::before {
-    content: '';
+    content: "";
     position: fixed;
     inset: 0;
-    background: radial-gradient(600px circle at 20% 20%, rgba(99, 102, 241, 0.25), rgba(99, 102, 241, 0)),
-      radial-gradient(500px circle at 80% 10%, rgba(168, 85, 247, 0.22), rgba(15, 23, 42, 0));
+    background: radial-gradient(
+        600px circle at 20% 20%,
+        rgba(99, 102, 241, 0.25),
+        rgba(99, 102, 241, 0)
+      ),
+      radial-gradient(
+        500px circle at 80% 10%,
+        rgba(168, 85, 247, 0.22),
+        rgba(15, 23, 42, 0)
+      );
     pointer-events: none;
     z-index: -2;
   }
 
   body::after {
-    content: '';
+    content: "";
     position: fixed;
     inset: 0;
     backdrop-filter: blur(80px);
@@ -254,7 +315,7 @@ const structuredData = seo?.structuredData;
   }
 
   .brand {
-    font-family: 'Manrope', 'Inter', sans-serif;
+    font-family: "Manrope", "Inter", sans-serif;
     font-weight: 700;
     font-size: 1.1rem;
     letter-spacing: 0.01em;
@@ -292,7 +353,7 @@ const structuredData = seo?.structuredData;
   }
 
   .site-nav a::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     bottom: -6px;
@@ -374,6 +435,52 @@ const structuredData = seo?.structuredData;
 
   .footer-links a:hover {
     color: var(--text-primary);
+  }
+
+  .header-icon {
+    margin-left: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: var(--text-secondary);
+    background: var(--surface-alt);
+    border: 1px solid var(--border-subtle);
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      color 0.2s ease,
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .header-icon:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.25);
+    color: var(--text-primary);
+    background: var(--accent-soft);
+    border-color: rgba(99, 102, 241, 0.4);
+  }
+
+  .skip-link {
+    position: absolute;
+    left: -999px;
+    top: -999px;
+    background: #111827;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+  }
+
+  .skip-link:focus {
+    left: 16px;
+    top: 16px;
   }
 
   @media (max-width: 960px) {
