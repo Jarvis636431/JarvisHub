@@ -14,8 +14,7 @@ stack:
   ]
 featured: true
 publishDate: 2024-11-05
-externalUrl: "https://example.com/orbit-journal"
-coverImage: "/images/projects/orbit-journal-cover.png"
+coverImage: "/public/assets/projects/coverimage/idesignLab.png"
 ---
 
 Orbit Journal is my experiment in visualizing the relationships between short notes, essays, and prototypes. It demonstrates how content collections can power both traditional lists and exploratory graphs from the same dataset.
