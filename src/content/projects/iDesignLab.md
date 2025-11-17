@@ -1,9 +1,17 @@
 ---
-title: "Orbit Journal"
-summary: "Linkable note garden that renders Markdown into a graph interface for exploring research trails and project breadcrumbs."
-status: "in-progress"
+title: "iDesignLab"
+summary: "天津大学工业设计实验室预约平台"
+status: "launched"
 roles: ["Creative Developer"]
-stack: ["Astro", "D3.js", "Content Collections"]
+stack:
+  [
+    "WxMp",
+    "Go+Gin+Gorm",
+    "MariaDB",
+    "Docker",
+    "Nginx",
+    "Vue3 + ElementPlus + Vite",
+  ]
 featured: true
 publishDate: 2024-11-05
 externalUrl: "https://example.com/orbit-journal"

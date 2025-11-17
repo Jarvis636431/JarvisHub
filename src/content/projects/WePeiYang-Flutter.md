@@ -1,6 +1,6 @@
 ---
-title: "Nebula Studio"
-summary: "Component-driven design system rolling out across a family of SaaS brands with adaptive theming and accessibility baked in."
+title: "WePeiYang-Flutter"
+summary: "A Campus Application For Tianjin University，Developed and Designed By TWTSTUDIO"
 status: "launched"
 roles: ["Design Lead", "Front-end Architect"]
 stack: ["Astro", "React", "Tailwind", "Storybook"]
