@@ -43,12 +43,8 @@ const fallbackSite = "https://jarvishub.com";
 const {
   title = "Jarvis Hub - Creative Developer",
   description = "Personal website of Jarvis Hub - crafting web experiences, writing, and sharing experiments in code.",
-  navLinks = [
-    { href: "/", label: "Home" },
     { href: "/projects", label: "Projects" },
     { href: "/blog", label: "Writing" },
-    { href: "#contact", label: "Contact" },
-  ],
   footerNote = "Built with Astro - Designed by Jarvis",
   seo,
 } = Astro.props as LayoutProps;
@@ -206,27 +202,96 @@ const structuredData = seo?.structuredData;
           Let's talk
         </a>
 
-        <!-- Mobile Menu Button (Simplified for now) -->
-        <button class="md:hidden text-white" aria-label="Menu">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><line x1="4" y1="12" x2="20" y2="12"></line><line
-              x1="4"
-              y1="6"
-              x2="20"
-              y2="6"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg
-          >
+        <!-- Mobile Menu Button -->
+        <button
+          id="menu-btn"
+          class="md:hidden text-white z-50 relative group"
+          aria-label="Menu"
+        >
+          <div class="w-6 h-5 flex flex-col justify-between">
+            <span
+              class="w-full h-0.5 bg-white transition-all duration-300 group-hover:bg-accent-cyan origin-left"
+            ></span>
+            <span
+              class="w-full h-0.5 bg-white transition-all duration-300 group-hover:bg-accent-cyan"
+            ></span>
+            <span
+              class="w-full h-0.5 bg-white transition-all duration-300 group-hover:bg-accent-cyan origin-left"
+            ></span>
+          </div>
         </button>
       </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div
+      id="mobile-menu"
+      class="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300"
+    >
+      <div
+        class="absolute inset-0 bg-[url('/grid.svg')] opacity-10 pointer-events-none"
+      >
+      </div>
+      <nav class="flex flex-col items-center gap-8 relative z-10">
+        {
+          navLinks.map(({ href, label }) => (
+            <a
+              href={href}
+              class="mobile-link text-4xl font-pixel text-white hover:text-accent-cyan transition-colors uppercase tracking-widest"
+            >
+              {label}
+            </a>
+          ))
+        }
+        <a
+          href="mailto:hello@jarvishub.com"
+          class="mt-8 px-8 py-4 border-2 border-accent-cyan text-accent-cyan font-pixel uppercase tracking-widest hover:bg-accent-cyan hover:text-black transition-all"
+        >
+          INITIATE_CONTACT
+        </a>
+      </nav>
+    </div>
+
+    <script>
+      const menuBtn = document.getElementById("menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const mobileLinks = document.querySelectorAll(".mobile-link");
+      let isMenuOpen = false;
+
+      function toggleMenu() {
+        isMenuOpen = !isMenuOpen;
+        if (isMenuOpen) {
+          mobileMenu?.classList.remove("opacity-0", "pointer-events-none");
+          document.body.style.overflow = "hidden";
+          // Animate burger icon
+          const spans = menuBtn?.querySelectorAll("span");
+          if (spans) {
+            spans[0].style.transform = "rotate(45deg)";
+            spans[1].style.opacity = "0";
+            spans[2].style.transform = "rotate(-45deg)";
+          }
+        } else {
+          mobileMenu?.classList.add("opacity-0", "pointer-events-none");
+          document.body.style.overflow = "";
+          // Reset burger icon
+          const spans = menuBtn?.querySelectorAll("span");
+          if (spans) {
+            spans[0].style.transform = "rotate(0)";
+            spans[1].style.opacity = "1";
+            spans[2].style.transform = "rotate(0)";
+          }
+        }
+      }
+
+      menuBtn?.addEventListener("click", toggleMenu);
+
+      // Close menu when clicking a link
+      mobileLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          if (isMenuOpen) toggleMenu();
+        });
+      });
+    </script>
 
     <main id="main" class="flex-1 pt-32 px-4 md:px-8 max-w-7xl mx-auto w-full">
       <slot />
