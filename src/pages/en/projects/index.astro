@@ -1,13 +1,16 @@
 ---
-import Layout from "@layouts/Layout.astro";
-import ProjectCard from "@components/ProjectCard.astro";
-import PixelCube from "@components/PixelCube.astro";
+import Layout from "../../../layouts/Layout.astro";
+import ProjectCard from "../../../components/ProjectCard.astro";
+import PixelCube from "../../../components/PixelCube.astro";
+import { useTranslations } from "../../../i18n/utils";
 import { getCollection } from "astro:content";
 
+const t = useTranslations("en");
+
 const projects = (
-  await getCollection("projects", ({ data }) =>
-    import.meta.env.DEV ? true : data.status !== "archived",
-  )
+  await getCollection("projects", ({ data }) => {
+    return import.meta.env.DEV ? true : data.status !== "archived";
+  })
 )
   .slice()
   .sort(
@@ -36,6 +39,7 @@ const projectsStructuredData = {
 <Layout
   title="Mission Log - Jarvis Hub"
   description="Selected client collaborations, experiments, and systems work."
+  lang="en"
   seo={{
     type: "website",
     image: {
@@ -68,7 +72,6 @@ const projectsStructuredData = {
           > Loading modules: Design Systems, Knowledge Graphs, Prototyping...
         </p>
       </div>
-
       <div class="hidden md:block">
         <PixelCube />
       </div>

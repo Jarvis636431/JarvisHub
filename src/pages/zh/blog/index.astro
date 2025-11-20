@@ -1,0 +1,93 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { useTranslations } from "../../../i18n/utils";
+import BlogCard from "../../../components/BlogCard.astro";
+import PixelCube from "../../../components/PixelCube.astro";
+
+const t = useTranslations("zh");
+
+const posts = (
+    await getCollection("blog", ({ data }) => {
+        return import.meta.env.DEV ? true : data.draft !== true;
+    })
+)
+    .slice()
+    .sort(
+        (a, b) =>
+            new Date(b.data.publishDate).getTime() -
+            new Date(a.data.publishDate).getTime(),
+    );
+
+const siteOrigin =
+    Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
+const pageUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+
+const blogStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "Jarvis Hub 写作 (Chinese)",
+    url: pageUrl,
+    description: "关于设计系统、创意开发和公开学习的长篇笔记。",
+    inLanguage: "zh-CN",
+};
+---
+
+<Layout
+    title="数据归档 - Jarvis Hub"
+    description="关于设计系统、创意开发和公开学习的长篇笔记。"
+    seo={{
+        type: "website",
+        image: {
+            src: "/favicon.svg",
+            alt: "Jarvis Hub logomark",
+        },
+        structuredData: blogStructuredData,
+    }}
+>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+        <header
+            class="relative flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-b-4 border-white/10 pb-12"
+        >
+            <div class="space-y-6 max-w-3xl">
+                <div
+                    class="inline-flex items-center gap-2 px-2 py-1 bg-accent-cyan/10 border border-accent-cyan/30 text-accent-cyan text-[10px] font-pixel uppercase tracking-widest"
+                >
+                    <span class="w-2 h-2 bg-accent-cyan animate-pulse"></span>
+                    系统日志 // 归档
+                </div>
+                <h1
+                    class="text-4xl md:text-6xl lg:text-7xl font-bold font-pixel tracking-tight leading-tight drop-shadow-[4px_4px_0px_rgba(167,139,250,1)]"
+                >
+                    数据<span class="text-accent-cyan">归档</span>
+                </h1>
+                <p
+                    class="text-lg text-secondary leading-relaxed max-w-2xl font-mono border-l-4 border-accent-violet pl-6"
+                >
+                    > 解码现代网络开发的混乱。 <br />
+                    > 协议、实验和思考。
+                </p>
+            </div>
+            <div class="hidden md:block">
+                <PixelCube />
+            </div>
+        </header>
+
+        <section class="space-y-8" aria-label="Latest transmissions">
+            <div class="flex items-center gap-4">
+                <h2 class="text-2xl font-pixel text-white">最新传输</h2>
+                <div class="h-1 flex-1 bg-white/10 border-b border-white/5">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {posts.map((post) => <BlogCard post={post} />)}
+            </div>
+        </section>
+    </div>
+</Layout>
+
+<style>
+    .perspective-1000 {
+        perspective: 1000px;
+    }
+</style>
