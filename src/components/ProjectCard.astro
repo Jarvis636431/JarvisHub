@@ -5,134 +5,76 @@ type ProjectEntry = CollectionEntry<"projects">;
 
 const { project } = Astro.props as { project: ProjectEntry };
 
-const publishDate = new Date(project.data.publishDate).toLocaleDateString("en-US", {
-  year: "numeric",
-  month: "short",
-});
+const publishDate = new Date(project.data.publishDate).toLocaleDateString(
+  "en-US",
+  {
+    year: "numeric",
+    month: "short",
+  },
+);
 
 const link = project.data.externalUrl ?? `/projects/${project.slug}`;
-const linkLabel = project.data.externalUrl ? "Visit project" : "Read case study";
+const linkLabel = project.data.externalUrl
+  ? "Visit project"
+  : "Read case study";
 ---
 
-<a class="project-card" href={link}>
-  <div class="project-card__header">
-    <span class={`status status--${project.data.status}`}>{project.data.status}</span>
-    <span class="project-card__date">{publishDate}</span>
+<a
+  class="group relative flex flex-col gap-4 p-8 rounded-3xl bg-surface/50 border border-white/5 hover:border-accent-cyan/30 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+  href={link}
+>
+  <div
+    class="flex items-center justify-between gap-4 text-sm text-secondary/80"
+  >
+    <span
+      class={`px-3 py-1 rounded-full text-xs font-medium border ${
+        project.data.status === "launched"
+          ? "bg-green-500/10 border-green-500/20 text-green-400"
+          : project.data.status === "in-progress"
+            ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
+            : "bg-slate-500/10 border-slate-500/20 text-slate-400"
+      } capitalize`}
+    >
+      {project.data.status}
+    </span>
+    <span class="font-mono text-xs">{publishDate}</span>
   </div>
-  <h3>{project.data.title}</h3>
-  <p>{project.data.summary}</p>
-  {project.data.roles.length > 0 && (
-    <p class="project-card__roles">Roles: {project.data.roles.join(", ")}</p>
-  )}
-  {project.data.stack.length > 0 && (
-    <ul class="project-card__stack">
-      {project.data.stack.map((item) => (
-        <li>{item}</li>
-      ))}
-    </ul>
-  )}
-  <span class="project-card__cta">{linkLabel}</span>
+
+  <div>
+    <h3
+      class="text-2xl font-bold mb-2 group-hover:text-accent-cyan transition-colors"
+    >
+      {project.data.title}
+    </h3>
+    <p class="text-secondary leading-relaxed group-hover:text-secondary/90">
+      {project.data.summary}
+    </p>
+  </div>
+
+  {
+    project.data.roles.length > 0 && (
+      <p class="text-sm text-secondary/70">
+        Roles: {project.data.roles.join(", ")}
+      </p>
+    )
+  }
+
+  {
+    project.data.stack.length > 0 && (
+      <ul class="flex flex-wrap gap-2 mt-auto pt-4">
+        {project.data.stack.map((item) => (
+          <li class="px-3 py-1 rounded-full bg-white/5 text-xs text-secondary group-hover:text-white transition-colors">
+            {item}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <div
+    class="pt-4 mt-2 border-t border-white/5 flex items-center text-accent-cyan font-medium text-sm group-hover:text-accent-violet transition-colors"
+  >
+    {linkLabel}
+    <span class="ml-2 transition-transform group-hover:translate-x-1">→</span>
+  </div>
 </a>
-
-<style>
-  .project-card {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    padding: 28px;
-    border-radius: 22px;
-    background: rgba(11, 16, 32, 0.6);
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    color: inherit;
-    text-decoration: none;
-    transition:
-      transform 0.25s ease,
-      border-color 0.25s ease,
-      box-shadow 0.25s ease;
-  }
-
-  .project-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(148, 163, 184, 0.32);
-    box-shadow: 0 20px 46px rgba(5, 7, 18, 0.55);
-  }
-
-  .project-card__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    font-size: 0.85rem;
-    color: rgba(148, 163, 184, 0.8);
-  }
-
-  .project-card h3 {
-    margin: 0;
-    font-size: 1.35rem;
-  }
-
-  .project-card p {
-    margin: 0;
-    color: rgba(203, 213, 225, 0.85);
-    line-height: 1.6;
-  }
-
-  .project-card__roles {
-    font-size: 0.9rem;
-    color: rgba(148, 163, 184, 0.8);
-  }
-
-  .project-card__stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .project-card__stack li {
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-  }
-
-  .project-card__cta {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: rgba(199, 210, 254, 0.95);
-  }
-
-  .status {
-    text-transform: capitalize;
-    padding: 4px 10px;
-    border-radius: 999px;
-    border: 1px solid rgba(148, 163, 184, 0.18);
-  }
-
-  .status--launched {
-    background: rgba(34, 197, 94, 0.1);
-    border-color: rgba(34, 197, 94, 0.35);
-    color: rgba(134, 239, 172, 0.95);
-  }
-
-  .status--in-progress {
-    background: rgba(250, 204, 21, 0.1);
-    border-color: rgba(250, 204, 21, 0.35);
-    color: rgba(253, 224, 71, 0.95);
-  }
-
-  .status--archived {
-    background: rgba(148, 163, 184, 0.1);
-    border-color: rgba(148, 163, 184, 0.35);
-    color: rgba(148, 163, 184, 0.95);
-  }
-
-  @media (max-width: 640px) {
-    .project-card {
-      padding: 24px;
-    }
-  }
-</style>

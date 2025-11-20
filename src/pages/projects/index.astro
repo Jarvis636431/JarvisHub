@@ -3,20 +3,23 @@ import Layout from "@layouts/Layout.astro";
 import ProjectCard from "@components/ProjectCard.astro";
 import { getCollection } from "astro:content";
 
-const projects = (await getCollection("projects", ({ data }) =>
-  import.meta.env.DEV ? true : data.status !== "archived"
-))
+const projects = (
+  await getCollection("projects", ({ data }) =>
+    import.meta.env.DEV ? true : data.status !== "archived",
+  )
+)
   .slice()
   .sort(
     (a, b) =>
       new Date(b.data.publishDate).getTime() -
-      new Date(a.data.publishDate).getTime()
+      new Date(a.data.publishDate).getTime(),
   );
 
 const featured = projects.filter(({ data }) => data.featured);
 const rest = projects.filter(({ data }) => !data.featured);
 
-const siteOrigin = Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
+const siteOrigin =
+  Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
 const pageUrl = new URL(Astro.url.pathname, siteOrigin).toString();
 
 const projectsStructuredData = {
@@ -41,79 +44,45 @@ const projectsStructuredData = {
     structuredData: projectsStructuredData,
   }}
 >
-  <article class="page">
-    <header class="page__hero">
-      <p class="page__eyebrow">Projects</p>
-      <h1>Systems, prototypes, and products I've helped shape.</h1>
-      <p class="page__summary">
-        From shipping multi-brand design systems to exploring knowledge graphs, these projects highlight the
-        collaboration patterns and tools I love using with teams.
+  <div class="max-w-5xl mx-auto space-y-20">
+    <header class="space-y-6 max-w-3xl">
+      <p class="text-accent-cyan text-xs font-bold tracking-widest uppercase">
+        Projects
+      </p>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
+        Systems, prototypes, and products I've helped shape.
+      </h1>
+      <p class="text-lg text-secondary leading-relaxed max-w-2xl">
+        From shipping multi-brand design systems to exploring knowledge graphs,
+        these projects highlight the collaboration patterns and tools I love
+        using with teams.
       </p>
     </header>
 
-    {featured.length > 0 && (
-      <section class="project-section" aria-label="Featured projects">
-        <h2>Featured</h2>
-        <div class="project-grid">
-          {featured.map((project) => <ProjectCard project={project} />)}
-        </div>
-      </section>
-    )}
+    {
+      featured.length > 0 && (
+        <section class="space-y-8" aria-label="Featured projects">
+          <h2 class="text-2xl font-bold">Featured</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {featured.map((project) => (
+              <ProjectCard project={project} />
+            ))}
+          </div>
+        </section>
+      )
+    }
 
-    {rest.length > 0 && (
-      <section class="project-section" aria-label="More work">
-        <h2>More work</h2>
-        <div class="project-grid">
-          {rest.map((project) => <ProjectCard project={project} />)}
-        </div>
-      </section>
-    )}
-  </article>
+    {
+      rest.length > 0 && (
+        <section class="space-y-8" aria-label="More work">
+          <h2 class="text-2xl font-bold">More work</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {rest.map((project) => (
+              <ProjectCard project={project} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </div>
 </Layout>
-
-<style>
-  .page {
-    display: flex;
-    flex-direction: column;
-    gap: 56px;
-  }
-
-  .page__hero {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    max-width: 720px;
-  }
-
-  .page__eyebrow {
-    font-size: 0.75rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.7);
-    font-weight: 600;
-    margin: 0;
-  }
-
-  .page__summary {
-    margin: 0;
-    line-height: 1.7;
-    color: rgba(203, 213, 225, 0.85);
-  }
-
-  .project-section {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .project-section h2 {
-    margin: 0;
-    font-size: 1.8rem;
-  }
-
-  .project-grid {
-    display: grid;
-    gap: 24px;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
-</style>

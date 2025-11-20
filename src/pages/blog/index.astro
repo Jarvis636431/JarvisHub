@@ -2,17 +2,20 @@
 import Layout from "@layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
-const posts = (await getCollection("blog", ({ data }) =>
-  import.meta.env.DEV ? true : data.draft !== true
-))
+const posts = (
+  await getCollection("blog", ({ data }) =>
+    import.meta.env.DEV ? true : data.draft !== true,
+  )
+)
   .slice()
   .sort(
     (a, b) =>
       new Date(b.data.publishDate).getTime() -
-      new Date(a.data.publishDate).getTime()
+      new Date(a.data.publishDate).getTime(),
   );
 
-const siteOrigin = Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
+const siteOrigin =
+  Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
 const pageUrl = new URL(Astro.url.pathname, siteOrigin).toString();
 
 const blogStructuredData = {
@@ -38,146 +41,65 @@ const blogStructuredData = {
     structuredData: blogStructuredData,
   }}
 >
-  <article class="page">
-    <header class="page__hero">
-      <p class="page__eyebrow">Writing</p>
-      <h1>Ideas, notes, and experiments in progress.</h1>
-      <p class="page__summary">
-        I document the systems, prototypes, and workflows that help me build better products.
-        These entries are a mix of deep dives, playbooks, and personal changelog updates.
+  <div class="max-w-3xl mx-auto space-y-16">
+    <header class="space-y-6">
+      <p class="text-accent-cyan text-xs font-bold tracking-widest uppercase">
+        Writing
+      </p>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
+        Ideas, notes, and experiments in progress.
+      </h1>
+      <p class="text-lg text-secondary leading-relaxed max-w-2xl">
+        I document the systems, prototypes, and workflows that help me build
+        better products. These entries are a mix of deep dives, playbooks, and
+        personal changelog updates.
       </p>
     </header>
 
-    <section class="post-grid" aria-label="Latest posts">
-      {posts.map((post) => {
-        const publishDate = new Date(post.data.publishDate).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
-        const readingTime = post.data.readingTime ?? 6;
+    <section class="grid gap-6" aria-label="Latest posts">
+      {
+        posts.map((post) => {
+          const publishDate = new Date(
+            post.data.publishDate,
+          ).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+          const readingTime = post.data.readingTime ?? 6;
 
-        return (
-          <a class="post-card" href={`/blog/${post.slug}`}>
-            <div class="post-card__meta">
-              <span>{publishDate}</span>
-              <span>{readingTime} min read</span>
-            </div>
-            <h2>{post.data.title}</h2>
-            <p>{post.data.description}</p>
-            {post.data.tags.length > 0 && (
-              <ul class="post-card__tags">
-                {post.data.tags.map((tag) => (
-                  <li>{tag}</li>
-                ))}
-              </ul>
-            )}
-          </a>
-        );
-      })}
+          return (
+            <a
+              class="group relative block p-8 rounded-3xl bg-surface/50 border border-white/5 hover:border-accent-cyan/30 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              href={`/blog/${post.slug}`}
+            >
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                <div class="flex items-center gap-3 text-xs font-medium text-secondary/80 uppercase tracking-wider">
+                  <span>{publishDate}</span>
+                  <span class="w-1 h-1 rounded-full bg-white/20" />
+                  <span>{readingTime} min read</span>
+                </div>
+                {post.data.tags.length > 0 && (
+                  <div class="flex gap-2">
+                    {post.data.tags.slice(0, 3).map((tag) => (
+                      <span class="px-2 py-1 rounded-md bg-white/5 text-xs text-secondary group-hover:text-white transition-colors">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <h2 class="text-2xl font-bold mb-3 group-hover:text-accent-cyan transition-colors">
+                {post.data.title}
+              </h2>
+              <p class="text-secondary leading-relaxed group-hover:text-secondary/90">
+                {post.data.description}
+              </p>
+            </a>
+          );
+        })
+      }
     </section>
-  </article>
+  </div>
 </Layout>
-
-<style>
-  .page {
-    display: flex;
-    flex-direction: column;
-    gap: 48px;
-  }
-
-  .page__hero {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    max-width: 720px;
-  }
-
-  .page__eyebrow {
-    font-size: 0.75rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.7);
-    font-weight: 600;
-    margin: 0;
-  }
-
-  .page__summary {
-    margin: 0;
-    line-height: 1.7;
-    color: rgba(203, 213, 225, 0.85);
-  }
-
-  .post-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-  }
-
-  .post-card {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 28px;
-    border-radius: 20px;
-    background: rgba(11, 16, 32, 0.65);
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    color: inherit;
-    text-decoration: none;
-    transition:
-      transform 0.25s ease,
-      border-color 0.25s ease,
-      box-shadow 0.25s ease;
-  }
-
-  .post-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(148, 163, 184, 0.32);
-    box-shadow: 0 18px 42px rgba(5, 7, 18, 0.55);
-  }
-
-  .post-card h2 {
-    margin: 0;
-    font-size: 1.4rem;
-  }
-
-  .post-card p {
-    margin: 0;
-    color: rgba(203, 213, 225, 0.85);
-    line-height: 1.65;
-  }
-
-  .post-card__meta {
-    display: flex;
-    gap: 12px;
-    font-size: 0.85rem;
-    color: rgba(148, 163, 184, 0.8);
-  }
-
-  .post-card__tags {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .post-card__tags li {
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-  }
-
-  @media (max-width: 640px) {
-    .page__hero {
-      gap: 14px;
-    }
-
-    .post-card {
-      padding: 24px;
-    }
-  }
-</style>

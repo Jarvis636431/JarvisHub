@@ -2,616 +2,183 @@
 import Layout from "@layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
-type NavLink = { href: string; label: string };
-type FocusArea = { title: string; description: string };
-type ProjectHighlight = {
-  title: string;
-  description: string;
-  stack: string[];
-  linkLabel: string;
-  link: string;
-};
-type WritingEntry = { title: string; description: string; date: string; link: string };
-type QuickStat = { label: string; value: string };
-
-const navLinks: NavLink[] = [
-  { href: '#hero', label: 'Home' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/blog', label: 'Writing' },
-  { href: '#contact', label: 'Contact' },
-];
-
-const focusAreas: FocusArea[] = [
-  {
-    title: 'Interface Craft',
-    description: 'Designing immersive, responsive web experiences with thoughtful motion and delightful micro-interactions.',
-  },
-  {
-    title: 'Product Systems',
-    description: 'Building scalable component systems, documentation, and tooling that empower fast-moving teams.',
-  },
-  {
-    title: 'Knowledge Sharing',
-    description: 'Writing deep-dives, tutorials, and changelogs to demystify modern web development and creative coding.',
-  },
-];
-
-const draftFilter = ({ data }: { data: { draft?: boolean } }) =>
-  import.meta.env.DEV ? true : data.draft !== true;
-
-const postsCollection = await getCollection("blog", draftFilter);
-const sortedPosts = postsCollection
-  .slice()
-  .sort(
-    (a, b) =>
-      new Date(b.data.publishDate).getTime() -
-      new Date(a.data.publishDate).getTime()
-  );
-
-const writingList: WritingEntry[] = sortedPosts.slice(0, 3).map((entry) => {
-  const publishDate = new Date(entry.data.publishDate);
-  const month = publishDate.toLocaleDateString("en-US", {
-    month: "short",
-  });
-  const day = publishDate
-    .toLocaleDateString("en-US", {
-      day: "2-digit",
-    })
-    .replace(/^0/, "");
-  const readingTime = entry.data.readingTime ?? 6;
-  return {
-    title: entry.data.title,
-    description: entry.data.description,
-    date: `${month} ${day} - ${readingTime} min read`,
-    link: `/blog/${entry.slug}`,
-  };
+const postsCollection = await getCollection("blog", ({ data }) => {
+  return import.meta.env.DEV ? true : data.draft !== true;
 });
 
-const projectsCollection = await getCollection("projects", ({ data }) =>
-  import.meta.env.DEV ? true : data.status !== "archived"
-);
+const sortedPosts = postsCollection
+  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+  .slice(0, 3);
+
+const projectsCollection = await getCollection("projects", ({ data }) => {
+  return import.meta.env.DEV ? true : data.status !== "archived";
+});
 
 const sortedProjects = projectsCollection
-  .slice()
-  .sort(
-    (a, b) =>
-      new Date(b.data.publishDate).getTime() -
-      new Date(a.data.publishDate).getTime()
-  );
+  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+  .filter(({ data }) => data.featured)
+  .slice(0, 4);
 
-const featured = sortedProjects.filter(({ data }) => data.featured);
-const sourceProjects = featured.length > 0 ? featured : sortedProjects;
-
-const projectHighlights: ProjectHighlight[] = sourceProjects
-  .slice(0, 3)
-  .map((entry) => ({
-    title: entry.data.title,
-    description: entry.data.summary,
-    stack: entry.data.stack,
-    linkLabel: entry.data.externalUrl ? "View project" : "Case study",
-    link: entry.data.externalUrl ?? `/projects/${entry.slug}`,
-  }));
-
-const quickStats: QuickStat[] = [
-  { label: 'Years in build mode', value: '6+' },
-  { label: 'Products shipped', value: '12' },
-  { label: 'Articles published', value: '38' },
+const stats = [
+  { label: 'Years Experience', value: '6+' },
+  { label: 'Products Shipped', value: '12' },
+  { label: 'Articles Written', value: '38' },
 ];
-
-const footerNote = `Copyright ${new Date().getFullYear()} Jarvis Hub. Built with Astro.`;
-
-const siteOrigin = Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
-const pageUrl = new URL(Astro.url.pathname, siteOrigin).toString();
-
-const homeStructuredData = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "Jarvis Hub",
-  url: pageUrl,
-  description:
-    "Creative developer crafting immersive interfaces, thoughtful systems, and long-form notes on building for the web.",
-  inLanguage: "en-US",
-};
 ---
 
-<Layout
-  title="Jarvis Hub - Creative Developer"
-  description="Creative developer crafting immersive interfaces, thoughtful systems, and long-form notes on building for the web."
-  navLinks={navLinks}
-  footerNote={footerNote}
-  seo={{
-    type: "website",
-    image: {
-      src: "/favicon.svg",
-      alt: "Jarvis Hub logomark",
-    },
-    structuredData: homeStructuredData,
-  }}
->
-  <section id="hero" class="hero">
-    <div class="hero__badge">Creative developer / Design systems / Learning in public</div>
-    <div class="hero__content">
-      <div class="hero__summary">
-        <h1>Hi, I'm Jarvis - I build purposeful digital experiences.</h1>
-        <p>
-          I help teams shape ambitious ideas into playful, performant interfaces.
-          Currently exploring the intersection of design systems, creative coding, and thoughtful storytelling.
-        </p>
-        <div class="hero__actions">
-          <a class="action action--primary" href="/projects">Explore my work</a>
-          <a class="action action--ghost" href="/blog">Read my writing</a>
-        </div>
-        <div class="hero__stats">
-          {quickStats.map(({ label, value }) => (
-            <div class="stat">
-              <span class="stat__value">{value}</span>
-              <span class="stat__label">{label}</span>
-            </div>
-          ))}
-        </div>
+<Layout title="Jarvis Hub | Digital Craftsman">
+  <!-- Hero Section -->
+  <section id="hero" class="min-h-[80vh] flex flex-col justify-center mb-32 relative">
+    <div class="absolute top-0 right-0 -z-10 opacity-30">
+      <svg width="600" height="600" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg" class="animate-spin-slow">
+        <circle cx="300" cy="300" r="299.5" stroke="url(#paint0_linear)" stroke-opacity="0.5"/>
+        <defs>
+          <linearGradient id="paint0_linear" x1="300" y1="0" x2="300" y2="600" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#22D3EE"/>
+            <stop offset="1" stop-color="#A78BFA" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="space-y-8 max-w-4xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent-cyan/30 bg-accent-cyan/10 text-accent-cyan text-xs font-medium tracking-wider uppercase">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-cyan opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-accent-cyan"></span>
+        </span>
+        Available for new projects
       </div>
-    </div>
-  </section>
 
-  
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tighter">
+        Crafting <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-cyan to-accent-violet">Digital</span><br/>
+        <span class="relative inline-block">
+          Universes
+          <svg class="absolute -bottom-2 left-0 w-full h-3 text-accent-violet opacity-60" viewBox="0 0 100 10" preserveAspectRatio="none">
+            <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="2" fill="none" />
+          </svg>
+        </span>
+      </h1>
 
-  <section id="projects" class="section">
-    <div class="section__label">Projects</div>
-    <div class="section__header">
-      <h2 class="section__title">Selected work</h2>
-      <a class="section__link" href="#contact">Discuss a collaboration</a>
-    </div>
-    <div class="card-grid card-grid--projects">
-      {projectHighlights.map(({ title, description, stack, link, linkLabel }) => (
-        <article class="card card--project">
-          <div class="card__header">
-            <h3>{title}</h3>
-            <a class="card__link" href={link}>{linkLabel}</a>
-          </div>
-          <p>{description}</p>
-          <div class="card__stack">
-            {stack.map((item) => (
-              <span>{item}</span>
-            ))}
-          </div>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section id="writing" class="section">
-    <div class="section__label">Writing</div>
-    <div class="section__header">
-      <h2 class="section__title">Latest notes & essays</h2>
-      <a class="section__link" href="/blog">Browse the archive</a>
-    </div>
-    <div class="writing-list">
-      {writingList.map(({ title, description, date, link }) => (
-        <article class="writing-card">
-          <div>
-            <h3>{title}</h3>
-            <p>{description}</p>
-          </div>
-          <div class="writing-card__meta">
-            <span>{date}</span>
-            <a href={link} class="writing-card__cta">Read</a>
-          </div>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section id="contact" class="section section--contact">
-    <div class="contact-card">
-      <span class="contact-card__eyebrow">Let's build something meaningful</span>
-      <h2>Have an idea, a problem to solve, or a story worth telling?</h2>
-      <p>
-        I partner with teams on digital products, content platforms, and creative experiments.
-        Share a few lines about what you're building and I'll get back within two days.
+      <p class="text-xl md:text-2xl text-secondary max-w-2xl leading-relaxed">
+        I'm Jarvis. A creative developer obsessed with building immersive, high-performance web experiences that leave a lasting impression.
       </p>
-      <div class="contact-card__actions">
-        <a class="action action--primary" href="mailto:hello@jarvishub.com">hello@jarvishub.com</a>
-        <a class="action action--ghost" href="https://cal.com" target="_blank" rel="noreferrer">Book a call</a>
+
+      <div class="flex flex-wrap gap-4 pt-4">
+        <a href="#projects" class="group relative px-8 py-4 bg-white text-background font-bold rounded-full overflow-hidden transition-transform hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-r from-accent-cyan to-accent-violet opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <span class="relative z-10 group-hover:text-white transition-colors">Explore Work</span>
+        </a>
+        <a href="/blog" class="px-8 py-4 rounded-full border border-white/10 hover:bg-white/5 transition-colors font-medium">
+          Read Notes
+        </a>
       </div>
+
+      <div class="grid grid-cols-3 gap-8 pt-12 border-t border-white/5 mt-12">
+        {stats.map(stat => (
+          <div>
+            <div class="text-3xl font-bold font-display text-white mb-1">{stat.value}</div>
+            <div class="text-sm text-secondary uppercase tracking-wider">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects -->
+  <section id="projects" class="mb-32">
+    <div class="flex items-end justify-between mb-12">
+      <div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Selected Work</h2>
+        <p class="text-secondary">A collection of recent experiments and products.</p>
+      </div>
+      <a href="/projects" class="hidden md:flex items-center gap-2 text-accent-cyan hover:text-accent-violet transition-colors">
+        View all projects <span class="text-xl">→</span>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {sortedProjects.map((project, index) => (
+        <article class={`group relative rounded-3xl overflow-hidden bg-surface border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,211,238,0.15)] ${index === 0 || index === 3 ? 'md:col-span-2 aspect-[2/1]' : 'aspect-square'}`}>
+          <a href={`/projects/${project.slug}`} class="absolute inset-0 z-20">
+            <span class="sr-only">View {project.data.title}</span>
+          </a>
+          
+          <div class="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent z-10 opacity-90"></div>
+          
+          <!-- Placeholder for project image if available, otherwise a gradient pattern -->
+          <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-accent-violet/20 via-background to-background opacity-50 group-hover:scale-105 transition-transform duration-700"></div>
+
+          <div class="absolute bottom-0 left-0 p-8 z-20 w-full">
+            <div class="flex flex-wrap gap-2 mb-4">
+              {project.data.stack?.slice(0, 3).map(tech => (
+                <span class="px-3 py-1 text-xs font-medium rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white/80">
+                  {tech}
+                </span>
+              ))}
+            </div>
+            <h3 class="text-2xl md:text-3xl font-bold mb-2 group-hover:text-accent-cyan transition-colors">{project.data.title}</h3>
+            <p class="text-secondary line-clamp-2 max-w-xl">{project.data.summary}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+    
+    <div class="mt-8 text-center md:hidden">
+      <a href="/projects" class="inline-flex items-center gap-2 text-accent-cyan">
+        View all projects →
+      </a>
+    </div>
+  </section>
+
+  <!-- Writing Section -->
+  <section id="writing" class="mb-32 grid md:grid-cols-12 gap-12">
+    <div class="md:col-span-4">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6">Writing</h2>
+      <p class="text-secondary mb-8">
+        Thoughts on software engineering, design systems, and the future of the web.
+      </p>
+      <a href="/blog" class="inline-flex px-6 py-3 rounded-full border border-white/10 hover:bg-white/5 transition-colors text-sm font-medium">
+        Read the Archive
+      </a>
+    </div>
+
+    <div class="md:col-span-8 space-y-6">
+      {sortedPosts.map(post => (
+        <a href={`/blog/${post.slug}`} class="group block p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-accent-cyan/30 hover:bg-white/10 transition-all duration-300">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+            <h3 class="text-xl font-bold group-hover:text-accent-cyan transition-colors">{post.data.title}</h3>
+            <time class="text-sm text-secondary font-mono shrink-0">
+              {new Date(post.data.publishDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </time>
+          </div>
+          <p class="text-secondary/80 line-clamp-2">{post.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Contact / CTA -->
+  <section id="contact" class="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-accent-violet/20 to-accent-cyan/10 border border-white/10 p-12 md:p-24 text-center">
+    <div class="absolute inset-0 bg-[url('/noise.png')] opacity-[0.05] mix-blend-overlay"></div>
+    <div class="relative z-10 max-w-2xl mx-auto">
+      <h2 class="text-4xl md:text-6xl font-bold mb-6 tracking-tight">Ready to start your next mission?</h2>
+      <p class="text-xl text-secondary mb-10">
+        I'm currently accepting new commissions. Let's build something that defies gravity.
+      </p>
+      <a href="mailto:hello@jarvishub.com" class="inline-block px-10 py-5 bg-white text-background text-lg font-bold rounded-full hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-300">
+        Initiate Contact
+      </a>
     </div>
   </section>
 </Layout>
 
 <style>
-  .hero {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
+  .animate-spin-slow {
+    animation: spin 12s linear infinite;
   }
-
-  .hero__badge {
-    align-self: flex-start;
-    padding: 8px 14px;
-    border-radius: 999px;
-    background: transparent;
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-  }
-
-  .hero__content {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 28px;
-    align-items: start;
-  }
-
-  .hero__summary h1 {
-    font-family: 'Manrope', 'Inter', sans-serif;
-    font-size: clamp(2.6rem, 4vw, 3.4rem);
-    line-height: 1.1;
-    margin: 0 0 18px;
-  }
-
-  .hero__summary p {
-    color: var(--text-secondary);
-    font-size: 1.05rem;
-    line-height: 1.7;
-    margin: 0 0 24px;
-    max-width: 640px;
-  }
-
-  .hero__actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 28px;
-  }
-
-  .action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 18px;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    text-decoration: none;
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease,
-      border-color 0.2s ease,
-      background 0.2s ease;
-    border: 1px solid transparent;
-  }
-
-  .action--primary {
-    background: transparent;
-    border-color: var(--border-subtle);
-    color: var(--text-primary);
-  }
-
-  .action--primary:hover {
-    transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.18);
-  }
-
-  .action--ghost {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-  }
-
-  .action--ghost:hover {
-    color: var(--text-primary);
-    text-decoration: underline;
-  }
-
-  .hero__stats {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    padding: 18px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-subtle);
-    background: rgba(10, 12, 29, 0.55);
-    max-width: 540px;
-  }
-
-  .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .stat__value {
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: white;
-  }
-
-  .stat__label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-  }
-
-  
-
-  .section {
-    margin-top: 120px;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-  }
-
-  .section__label {
-    font-size: 0.8rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.7);
-    font-weight: 600;
-  }
-
-  .section__title {
-    font-family: 'Manrope', 'Inter', sans-serif;
-    font-size: clamp(2rem, 3vw, 2.6rem);
-    margin: 0;
-  }
-
-  .section__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    flex-wrap: wrap;
-  }
-
-  .section__link {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-weight: 500;
-    border-bottom: 1px solid transparent;
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  .section__link:hover {
-    color: var(--text-primary);
-    border-color: var(--text-primary);
-  }
-
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
-  }
-
-  .card {
-    padding: 28px;
-    border-radius: var(--radius-md);
-    background: transparent;
-    border: 1px solid rgba(148, 163, 184, 0.12);
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    box-shadow: none;
-    transition:
-      transform 0.25s ease,
-      border-color 0.25s ease,
-      box-shadow 0.25s ease;
-  }
-
-  .card:hover {
-    transform: translateY(-2px);
-    border-color: rgba(148, 163, 184, 0.2);
-    box-shadow: none;
-  }
-
-  .card h3 {
-    margin: 0;
-    font-size: 1.3rem;
-  }
-
-  .card p {
-    margin: 0;
-    color: var(--text-secondary);
-    line-height: 1.65;
-  }
-
-  .card__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .card__link {
-    font-size: 0.9rem;
-    color: rgba(199, 210, 254, 0.9);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-  }
-
-  .card__link:hover {
-    border-color: rgba(199, 210, 254, 0.5);
-  }
-
-  .card__stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .card__stack span {
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(199, 210, 254, 0.9);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-  }
-
-  
-
-  .card-grid--projects {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
-
-  .writing-list {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .writing-card {
-    padding: 24px 26px;
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(148, 163, 184, 0.12);
-    background: transparent;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    transition:
-      transform 0.25s ease,
-      border-color 0.25s ease,
-      box-shadow 0.25s ease;
-  }
-
-  .writing-card:hover {
-    transform: translateY(-2px);
-    border-color: rgba(148, 163, 184, 0.2);
-    box-shadow: none;
-  }
-
-  .writing-card h3 {
-    margin: 0 0 8px;
-    font-size: 1.25rem;
-  }
-
-  .writing-card p {
-    margin: 0;
-    color: var(--text-secondary);
-    line-height: 1.65;
-  }
-
-  .writing-card__meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    color: rgba(148, 163, 184, 0.85);
-    font-size: 0.9rem;
-  }
-
-  .writing-card__cta {
-    padding: 8px 14px;
-    border-radius: 999px;
-    background: transparent;
-    text-decoration: none;
-    color: rgba(199, 210, 254, 0.95);
-    border: 1px solid rgba(148, 163, 184, 0.12);
-    transition:
-      background 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  .writing-card__cta:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(199, 210, 254, 0.24);
-  }
-
-  .section--contact {
-    margin-bottom: 40px;
-  }
-
-  .contact-card {
-    padding: 48px;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, rgba(17, 24, 47, 0.95), rgba(26, 20, 52, 0.95));
-    border: 1px solid rgba(148, 163, 184, 0.22);
-    box-shadow: 0 28px 60px rgba(5, 7, 18, 0.65);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .contact-card__eyebrow {
-    font-size: 0.85rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(199, 210, 254, 0.8);
-    font-weight: 600;
-  }
-
-  .contact-card h2 {
-    margin: 0;
-    font-size: clamp(2rem, 3vw, 2.6rem);
-  }
-
-  .contact-card p {
-    margin: 0;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    max-width: 620px;
-  }
-
-  .contact-card__actions {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-  }
-
-  
-
-  @media (max-width: 960px) {
-    .hero__content {
-      grid-template-columns: 1fr;
-    }
-
-    .hero__visual {
-      order: -1;
-      justify-content: flex-start;
-    }
-
-    .orbit-card {
-      max-width: 100%;
-    }
-
-    .hero__stats {
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
-
-    .card-grid {
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    }
-  }
-
-  @media (max-width: 640px) {
-    .hero {
-      gap: 24px;
-    }
-
-    .hero__badge {
-      font-size: 0.75rem;
-      padding: 8px 14px;
-    }
-
-    .hero__actions {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .section {
-      margin-top: 90px;
-    }
-
-    .card,
-    .writing-card {
-      padding: 22px;
-    }
-
-    .contact-card {
-      padding: 32px;
-    }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 </style>
