@@ -43,8 +43,10 @@ const fallbackSite = "https://jarvishub.com";
 const {
   title = "Jarvis Hub - Creative Developer",
   description = "Personal website of Jarvis Hub - crafting web experiences, writing, and sharing experiments in code.",
+  navLinks = [
     { href: "/projects", label: "Projects" },
     { href: "/blog", label: "Writing" },
+  ],
   footerNote = "Built with Astro - Designed by Jarvis",
   seo,
 } = Astro.props as LayoutProps;
