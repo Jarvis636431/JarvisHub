@@ -14,56 +14,56 @@ const publishDate = new Date(project.data.publishDate).toLocaleDateString(
 );
 
 const link = project.data.externalUrl ?? `/projects/${project.slug}`;
-const linkLabel = project.data.externalUrl
-  ? "Visit project"
-  : "Read case study";
+const linkLabel = project.data.externalUrl ? "VISIT_SITE" : "READ_LOG";
 ---
 
 <a
-  class="group relative flex flex-col gap-4 p-8 rounded-3xl bg-surface/50 border border-white/5 hover:border-accent-cyan/30 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+  class="group relative flex flex-col gap-4 p-6 bg-black border-2 border-white/20 hover:border-accent-cyan transition-colors duration-0 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.1)] hover:shadow-[4px_4px_0px_0px_rgba(34,211,238,1)] hover:-translate-y-1 hover:-translate-x-1"
   href={link}
 >
   <div
-    class="flex items-center justify-between gap-4 text-sm text-secondary/80"
+    class="flex items-center justify-between gap-4 text-xs font-pixel tracking-widest text-secondary/80"
   >
     <span
-      class={`px-3 py-1 rounded-full text-xs font-medium border ${
+      class={`px-2 py-1 border ${
         project.data.status === "launched"
-          ? "bg-green-500/10 border-green-500/20 text-green-400"
+          ? "bg-green-900/30 border-green-500 text-green-400"
           : project.data.status === "in-progress"
-            ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
-            : "bg-slate-500/10 border-slate-500/20 text-slate-400"
-      } capitalize`}
+            ? "bg-yellow-900/30 border-yellow-500 text-yellow-400"
+            : "bg-slate-800 border-slate-500 text-slate-400"
+      } uppercase`}
     >
       {project.data.status}
     </span>
-    <span class="font-mono text-xs">{publishDate}</span>
+    <span>{publishDate}</span>
   </div>
 
   <div>
     <h3
-      class="text-2xl font-bold mb-2 group-hover:text-accent-cyan transition-colors"
+      class="text-xl md:text-2xl font-bold mb-3 font-pixel leading-tight group-hover:text-accent-cyan transition-colors"
     >
       {project.data.title}
     </h3>
-    <p class="text-secondary leading-relaxed group-hover:text-secondary/90">
+    <p
+      class="text-secondary leading-relaxed font-mono text-sm border-l-2 border-white/10 pl-3 group-hover:border-accent-cyan/50 transition-colors"
+    >
       {project.data.summary}
     </p>
   </div>
 
   {
     project.data.roles.length > 0 && (
-      <p class="text-sm text-secondary/70">
-        Roles: {project.data.roles.join(", ")}
+      <p class="text-xs font-mono text-secondary/70 uppercase tracking-wider">
+        > Roles: {project.data.roles.join(", ")}
       </p>
     )
   }
 
   {
     project.data.stack.length > 0 && (
-      <ul class="flex flex-wrap gap-2 mt-auto pt-4">
+      <ul class="flex flex-wrap gap-2 mt-auto pt-4 border-t-2 border-white/10 border-dashed">
         {project.data.stack.map((item) => (
-          <li class="px-3 py-1 rounded-full bg-white/5 text-xs text-secondary group-hover:text-white transition-colors">
+          <li class="px-2 py-1 bg-white/5 text-[10px] font-pixel text-secondary group-hover:text-white transition-colors uppercase">
             {item}
           </li>
         ))}
@@ -72,9 +72,8 @@ const linkLabel = project.data.externalUrl
   }
 
   <div
-    class="pt-4 mt-2 border-t border-white/5 flex items-center text-accent-cyan font-medium text-sm group-hover:text-accent-violet transition-colors"
+    class="pt-2 mt-2 flex items-center justify-end text-accent-cyan font-pixel text-[10px] uppercase tracking-widest group-hover:text-accent-violet transition-colors"
   >
-    {linkLabel}
-    <span class="ml-2 transition-transform group-hover:translate-x-1">→</span>
+    [{linkLabel}] <span class="ml-2 animate-pulse">_</span>
   </div>
 </a>

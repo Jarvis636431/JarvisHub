@@ -1,6 +1,7 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import ProjectCard from "@components/ProjectCard.astro";
+import PixelCube from "@components/PixelCube.astro";
 import { getCollection } from "astro:content";
 
 const projects = (
@@ -33,7 +34,7 @@ const projectsStructuredData = {
 ---
 
 <Layout
-  title="Projects - Jarvis Hub"
+  title="Mission Log - Jarvis Hub"
   description="Selected client collaborations, experiments, and systems work."
   seo={{
     type: "website",
@@ -44,25 +45,42 @@ const projectsStructuredData = {
     structuredData: projectsStructuredData,
   }}
 >
-  <div class="max-w-5xl mx-auto space-y-20">
-    <header class="space-y-6 max-w-3xl">
-      <p class="text-accent-cyan text-xs font-bold tracking-widest uppercase">
-        Projects
-      </p>
-      <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
-        Systems, prototypes, and products I've helped shape.
-      </h1>
-      <p class="text-lg text-secondary leading-relaxed max-w-2xl">
-        From shipping multi-brand design systems to exploring knowledge graphs,
-        these projects highlight the collaboration patterns and tools I love
-        using with teams.
-      </p>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+    <header
+      class="relative flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-b-4 border-white/10 pb-12"
+    >
+      <div class="space-y-6 max-w-3xl">
+        <div
+          class="inline-flex items-center gap-2 px-2 py-1 bg-accent-cyan/10 border border-accent-cyan/30 text-accent-cyan text-[10px] font-pixel uppercase tracking-widest"
+        >
+          <span class="w-2 h-2 bg-accent-cyan animate-pulse"></span>
+          System: Online
+        </div>
+        <h1
+          class="text-4xl md:text-6xl font-bold font-pixel tracking-tight leading-tight"
+        >
+          MISSION <span class="text-accent-cyan">LOGS</span>
+        </h1>
+        <p
+          class="text-lg text-secondary leading-relaxed max-w-2xl font-mono border-l-4 border-accent-violet pl-6"
+        >
+          > Executing: project_retrieval.exe <br />
+          > Loading modules: Design Systems, Knowledge Graphs, Prototyping...
+        </p>
+      </div>
+
+      <div class="hidden md:block">
+        <PixelCube />
+      </div>
     </header>
 
     {
       featured.length > 0 && (
         <section class="space-y-8" aria-label="Featured projects">
-          <h2 class="text-2xl font-bold">Featured</h2>
+          <div class="flex items-center gap-4">
+            <h2 class="text-2xl font-pixel text-white">PRIORITY_TARGETS</h2>
+            <div class="h-1 flex-1 bg-white/10 border-b border-white/5" />
+          </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             {featured.map((project) => (
               <ProjectCard project={project} />
@@ -75,7 +93,10 @@ const projectsStructuredData = {
     {
       rest.length > 0 && (
         <section class="space-y-8" aria-label="More work">
-          <h2 class="text-2xl font-bold">More work</h2>
+          <div class="flex items-center gap-4">
+            <h2 class="text-2xl font-pixel text-secondary">SIDE_QUESTS</h2>
+            <div class="h-1 flex-1 bg-white/10 border-b border-white/5" />
+          </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {rest.map((project) => (
               <ProjectCard project={project} />
