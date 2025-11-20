@@ -41,65 +41,109 @@ const blogStructuredData = {
     structuredData: blogStructuredData,
   }}
 >
-  <div class="max-w-3xl mx-auto space-y-16">
-    <header class="space-y-6">
-      <p class="text-accent-cyan text-xs font-bold tracking-widest uppercase">
-        Writing
-      </p>
-      <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
-        Ideas, notes, and experiments in progress.
-      </h1>
-      <p class="text-lg text-secondary leading-relaxed max-w-2xl">
-        I document the systems, prototypes, and workflows that help me build
-        better products. These entries are a mix of deep dives, playbooks, and
-        personal changelog updates.
-      </p>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <header class="mb-24 relative">
+      <div
+        class="absolute -left-20 -top-20 w-64 h-64 bg-accent-cyan/20 rounded-full blur-[100px] pointer-events-none"
+      >
+      </div>
+
+      <div class="relative z-10">
+        <div class="flex items-center gap-4 mb-4">
+          <span class="h-px w-12 bg-accent-cyan"></span>
+          <span
+            class="font-mono text-accent-cyan text-sm tracking-widest uppercase"
+            >System Logs // Archive</span
+          >
+        </div>
+        <h1
+          class="text-6xl md:text-8xl font-bold tracking-tighter mb-6 glitch"
+          data-text="TRANSMISSIONS"
+        >
+          TRANSMISSIONS
+        </h1>
+        <p
+          class="text-xl md:text-2xl text-secondary max-w-2xl font-light border-l-2 border-accent-violet/30 pl-6"
+        >
+          Decoding the chaos of modern web development. <br />
+          <span class="text-white font-medium"
+            >Protocols, experiments, and thoughts.</span
+          >
+        </p>
+      </div>
     </header>
 
-    <section class="grid gap-6" aria-label="Latest posts">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-1000"
+    >
       {
-        posts.map((post) => {
+        posts.map((post, index) => {
           const publishDate = new Date(
             post.data.publishDate,
           ).toLocaleDateString("en-US", {
             year: "numeric",
-            month: "short",
-            day: "numeric",
+            month: "2-digit",
+            day: "2-digit",
           });
           const readingTime = post.data.readingTime ?? 6;
 
           return (
             <a
-              class="group relative block p-8 rounded-3xl bg-surface/50 border border-white/5 hover:border-accent-cyan/30 hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
               href={`/blog/${post.slug}`}
+              class="group relative h-[400px] w-full transform-style-3d transition-all duration-500 hover:z-50"
+              style={`animation-delay: ${index * 100}ms`}
             >
-              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                <div class="flex items-center gap-3 text-xs font-medium text-secondary/80 uppercase tracking-wider">
-                  <span>{publishDate}</span>
-                  <span class="w-1 h-1 rounded-full bg-white/20" />
-                  <span>{readingTime} min read</span>
+              <div class="absolute inset-0 bg-surface/80 backdrop-blur-md border border-white/10 rounded-xl p-8 flex flex-col justify-between transition-all duration-300 group-hover:border-accent-cyan/50 group-hover:shadow-[0_0_30px_rgba(34,211,238,0.15)] group-hover:-translate-y-2">
+                {/* Decorative Data Elements */}
+                <div class="absolute top-4 right-4 font-mono text-[10px] text-white/20 flex flex-col items-end gap-1">
+                  <span>
+                    ID: {Math.random().toString(36).substr(2, 6).toUpperCase()}
+                  </span>
+                  <span>SEC: 0{index + 1}</span>
                 </div>
-                {post.data.tags.length > 0 && (
-                  <div class="flex gap-2">
-                    {post.data.tags.slice(0, 3).map((tag) => (
-                      <span class="px-2 py-1 rounded-md bg-white/5 text-xs text-secondary group-hover:text-white transition-colors">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
+                <div class="absolute bottom-4 right-4 w-16 h-16 border-r border-b border-white/10 rounded-br-xl" />
 
-              <h2 class="text-2xl font-bold mb-3 group-hover:text-accent-cyan transition-colors">
-                {post.data.title}
-              </h2>
-              <p class="text-secondary leading-relaxed group-hover:text-secondary/90">
-                {post.data.description}
-              </p>
+                <div class="space-y-4">
+                  <div class="flex items-center gap-3 font-mono text-xs text-accent-cyan">
+                    <span class="px-2 py-1 border border-accent-cyan/30 rounded bg-accent-cyan/5">
+                      {publishDate}
+                    </span>
+                    <span class="text-secondary">{readingTime} MIN READ</span>
+                  </div>
+
+                  <h2 class="text-3xl font-bold leading-tight group-hover:text-accent-cyan transition-colors">
+                    {post.data.title}
+                  </h2>
+
+                  <p class="text-secondary/80 line-clamp-3 font-light">
+                    {post.data.description}
+                  </p>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mt-6">
+                  {post.data.tags.slice(0, 3).map((tag) => (
+                    <span class="text-xs font-mono text-secondary group-hover:text-white transition-colors">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Hover Overlay Effect */}
+                <div class="absolute inset-0 bg-gradient-to-b from-accent-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl pointer-events-none" />
+              </div>
             </a>
           );
         })
       }
-    </section>
+    </div>
   </div>
 </Layout>
+
+<style>
+  /* Custom Tilt Effect Logic would ideally go here or in a script, 
+     but for pure CSS we rely on hover transforms and perspective */
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+</style>
