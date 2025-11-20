@@ -19,6 +19,7 @@ const config = {
       fontFamily: {
         display: ["Outfit", "sans-serif"],
         body: ["Inter", "sans-serif"],
+        pixel: ['"Press Start 2P"', "cursive"],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

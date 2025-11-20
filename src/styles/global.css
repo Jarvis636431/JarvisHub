@@ -1,16 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;700;900&family=Press+Start+2P&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: 3 7 18;
+    --surface: 15 23 42;
+  }
+
   html {
+    background-color: rgb(var(--background));
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-background text-primary font-body antialiased selection:bg-accent-cyan/30 selection:text-accent-cyan;
+    @apply bg-background text-slate-50 font-body antialiased selection:bg-accent-cyan/30 selection:text-accent-cyan;
   }
 
   h1,
@@ -19,7 +25,7 @@
   h4,
   h5,
   h6 {
-    @apply font-display font-bold tracking-tight;
+    @apply font-display text-white;
   }
 }
 
@@ -174,5 +180,9 @@
 
   .rotate-y-180 {
     transform: rotateY(180deg);
+  }
+
+  .image-pixelated {
+    image-rendering: pixelated;
   }
 }
