@@ -1,5 +1,7 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import PixelCube from "@components/PixelCube.astro";
+import BlogCard from "@components/BlogCard.astro";
 import { getCollection } from "astro:content";
 
 const posts = (
@@ -30,7 +32,7 @@ const blogStructuredData = {
 ---
 
 <Layout
-  title="Writing - Jarvis Hub"
+  title="Data Archive - Jarvis Hub"
   description="Long-form notes on design systems, creative development, and learning in public."
   seo={{
     type: "website",
@@ -41,108 +43,48 @@ const blogStructuredData = {
     structuredData: blogStructuredData,
   }}
 >
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <header class="mb-24 relative">
-      <div
-        class="absolute -left-20 -top-20 w-64 h-64 bg-accent-cyan/20 rounded-full blur-[100px] pointer-events-none"
-      >
-      </div>
-
-      <div class="relative z-10">
-        <div class="flex items-center gap-4 mb-4">
-          <span class="h-px w-12 bg-accent-cyan"></span>
-          <span
-            class="font-mono text-accent-cyan text-sm tracking-widest uppercase"
-            >System Logs // Archive</span
-          >
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+    <header
+      class="relative flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-b-4 border-white/10 pb-12"
+    >
+      <div class="space-y-6 max-w-3xl">
+        <div
+          class="inline-flex items-center gap-2 px-2 py-1 bg-accent-cyan/10 border border-accent-cyan/30 text-accent-cyan text-[10px] font-pixel uppercase tracking-widest"
+        >
+          <span class="w-2 h-2 bg-accent-cyan animate-pulse"></span>
+          System Logs // Archive
         </div>
         <h1
-          class="text-6xl md:text-8xl font-bold tracking-tighter mb-6 glitch"
-          data-text="TRANSMISSIONS"
+          class="text-4xl md:text-6xl font-bold font-pixel tracking-tight leading-tight"
         >
-          TRANSMISSIONS
+          DATA <span class="text-accent-cyan">ARCHIVE</span>
         </h1>
         <p
-          class="text-xl md:text-2xl text-secondary max-w-2xl font-light border-l-2 border-accent-violet/30 pl-6"
+          class="text-lg text-secondary leading-relaxed max-w-2xl font-mono border-l-4 border-accent-violet pl-6"
         >
-          Decoding the chaos of modern web development. <br />
-          <span class="text-white font-medium"
-            >Protocols, experiments, and thoughts.</span
-          >
+          > Decoding the chaos of modern web development. <br />
+          > Protocols, experiments, and thoughts.
         </p>
+      </div>
+
+      <div class="hidden md:block">
+        <PixelCube />
       </div>
     </header>
 
-    <div
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-1000"
-    >
-      {
-        posts.map((post, index) => {
-          const publishDate = new Date(
-            post.data.publishDate,
-          ).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-          });
-          const readingTime = post.data.readingTime ?? 6;
-
-          return (
-            <a
-              href={`/blog/${post.slug}`}
-              class="group relative h-[400px] w-full transform-style-3d transition-all duration-500 hover:z-50"
-              style={`animation-delay: ${index * 100}ms`}
-            >
-              <div class="absolute inset-0 bg-surface/80 backdrop-blur-md border border-white/10 rounded-xl p-8 flex flex-col justify-between transition-all duration-300 group-hover:border-accent-cyan/50 group-hover:shadow-[0_0_30px_rgba(34,211,238,0.15)] group-hover:-translate-y-2">
-                {/* Decorative Data Elements */}
-                <div class="absolute top-4 right-4 font-mono text-[10px] text-white/20 flex flex-col items-end gap-1">
-                  <span>
-                    ID: {Math.random().toString(36).substr(2, 6).toUpperCase()}
-                  </span>
-                  <span>SEC: 0{index + 1}</span>
-                </div>
-                <div class="absolute bottom-4 right-4 w-16 h-16 border-r border-b border-white/10 rounded-br-xl" />
-
-                <div class="space-y-4">
-                  <div class="flex items-center gap-3 font-mono text-xs text-accent-cyan">
-                    <span class="px-2 py-1 border border-accent-cyan/30 rounded bg-accent-cyan/5">
-                      {publishDate}
-                    </span>
-                    <span class="text-secondary">{readingTime} MIN READ</span>
-                  </div>
-
-                  <h2 class="text-3xl font-bold leading-tight group-hover:text-accent-cyan transition-colors">
-                    {post.data.title}
-                  </h2>
-
-                  <p class="text-secondary/80 line-clamp-3 font-light">
-                    {post.data.description}
-                  </p>
-                </div>
-
-                <div class="flex flex-wrap gap-2 mt-6">
-                  {post.data.tags.slice(0, 3).map((tag) => (
-                    <span class="text-xs font-mono text-secondary group-hover:text-white transition-colors">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Hover Overlay Effect */}
-                <div class="absolute inset-0 bg-gradient-to-b from-accent-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl pointer-events-none" />
-              </div>
-            </a>
-          );
-        })
-      }
-    </div>
+    <section class="space-y-8" aria-label="Latest transmissions">
+      <div class="flex items-center gap-4">
+        <h2 class="text-2xl font-pixel text-white">LATEST_TRANSMISSIONS</h2>
+        <div class="h-1 flex-1 bg-white/10 border-b border-white/5"></div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((post) => <BlogCard post={post} />)}
+      </div>
+    </section>
   </div>
 </Layout>
 
 <style>
-  /* Custom Tilt Effect Logic would ideally go here or in a script, 
-     but for pure CSS we rely on hover transforms and perspective */
-
   .perspective-1000 {
     perspective: 1000px;
   }

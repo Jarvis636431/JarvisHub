@@ -1,0 +1,65 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type PostEntry = CollectionEntry<"blog">;
+
+const { post } = Astro.props as { post: PostEntry };
+
+const publishDate = new Date(post.data.publishDate).toLocaleDateString(
+    "en-US",
+    {
+        year: "numeric",
+        month: "short",
+    },
+);
+
+const readingTime = post.data.readingTime ?? 6;
+const link = `/blog/${post.slug}`;
+---
+
+<a
+    class="group relative flex flex-col gap-4 p-6 bg-black border-2 border-white/20 hover:border-accent-cyan transition-colors duration-0 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.1)] hover:shadow-[4px_4px_0px_0px_rgba(34,211,238,1)] hover:-translate-y-1 hover:-translate-x-1"
+    href={link}
+>
+    <div
+        class="flex items-center justify-between gap-4 text-xs font-pixel tracking-widest text-secondary/80"
+    >
+        <span
+            class="px-2 py-1 border bg-slate-800 border-slate-500 text-slate-400 uppercase"
+        >
+            {readingTime} MIN READ
+        </span>
+        <span>{publishDate}</span>
+    </div>
+
+    <div>
+        <h3
+            class="text-xl md:text-2xl font-bold mb-3 font-pixel leading-tight group-hover:text-accent-cyan transition-colors"
+        >
+            {post.data.title}
+        </h3>
+        <p
+            class="text-secondary leading-relaxed font-mono text-sm border-l-2 border-white/10 pl-3 group-hover:border-accent-cyan/50 transition-colors line-clamp-3"
+        >
+            {post.data.description}
+        </p>
+    </div>
+
+    {
+        post.data.tags.length > 0 && (
+            <ul class="flex flex-wrap gap-2 mt-auto pt-4 border-t-2 border-white/10 border-dashed">
+                {post.data.tags.slice(0, 3).map((tag) => (
+                    <li class="px-2 py-1 bg-white/5 text-[10px] font-pixel text-secondary group-hover:text-white transition-colors uppercase">
+                        #{tag}
+                    </li>
+                ))}
+            </ul>
+        )
+    }
+
+    <div
+        class="pt-2 mt-2 flex items-center justify-end text-accent-cyan font-pixel text-[10px] uppercase tracking-widest group-hover:text-accent-violet transition-colors"
+    >
+        [ACCESS_FILE] <span class="ml-2 animate-pulse">_</span>
+    </div>
+</a>
