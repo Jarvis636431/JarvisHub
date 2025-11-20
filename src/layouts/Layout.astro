@@ -55,10 +55,10 @@ const t = useTranslations(lang);
 
 const navLinks = [
   {
-    href: lang === "en" ? "/en/projects" : "/zh/projects",
+    href: lang === "en" ? "/projects" : "/zh/projects",
     label: t("nav.projects"),
   },
-  { href: lang === "en" ? "/en/blog" : "/zh/blog", label: t("nav.blog") },
+  { href: lang === "en" ? "/blog" : "/zh/blog", label: t("nav.blog") },
 ];
 
 const requestUrl = Astro.url;
@@ -189,7 +189,7 @@ const structuredData = seo?.structuredData;
 
     <!-- Language Switcher (Top Right) -->
     <a
-      href={lang === "en" ? "/zh/" : "/en/"}
+      href={lang === "en" ? "/zh" : "/"}
       class="fixed top-6 right-6 z-50 hidden md:flex items-center justify-center px-4 py-2 text-xs font-pixel text-white bg-black/50 backdrop-blur-md border border-white/20 rounded hover:border-accent-cyan hover:text-accent-cyan transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)] hover:shadow-[2px_2px_0px_0px_rgba(34,211,238,0.5)] hover:translate-y-[2px] hover:translate-x-[2px]"
     >
       [{lang === "en" ? "中文" : "EN"}]
@@ -199,7 +199,7 @@ const structuredData = seo?.structuredData;
       <div class="glass-panel rounded-full px-6 py-3 flex items-center gap-8">
         <a
           class="font-display font-bold text-lg tracking-tight flex items-center gap-2 hover:text-accent-cyan transition-colors"
-          href={lang === "en" ? "/en/" : "/zh/"}
+          href={lang === "en" ? "/" : "/zh"}
         >
           <span
             class="w-2 h-2 rounded-full bg-accent-cyan shadow-[0_0_10px_rgba(34,211,238,0.8)]"
