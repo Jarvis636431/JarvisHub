@@ -1,12 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap');
+
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .glow-card {
-    @apply rounded-3xl border border-slate-600/30 bg-slate-900/70 shadow-[0_24px_48px_rgba(15,23,42,0.45)];
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-background text-primary font-body antialiased selection:bg-accent-cyan/30 selection:text-accent-cyan;
   }
 
-  .link-soft {
-    @apply text-slate-300 transition-colors duration-200 hover:text-white;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-glass;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-cyan to-accent-violet;
   }
 }

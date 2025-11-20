@@ -150,21 +150,6 @@ const homeStructuredData = {
           ))}
         </div>
       </div>
-      <div class="hero__visual">
-        <div class="orbit-card">
-          <span class="orbit-card__tag">Now</span>
-          <h2>Designing experiences that feel human.</h2>
-          <p>
-            I dive deep into user journeys, take notes in public, and prototype wildly before shipping deliberate, polished work.
-          </p>
-          <ul>
-            <li>Spotlighting emerging tools & workflows</li>
-            <li>Documenting everything in the open</li>
-            <li>Pairing code, visuals, and narrative</li>
-          </ul>
-        </div>
-        <div class="hero__gradient" aria-hidden="true"></div>
-      </div>
     </div>
   </section>
 
@@ -241,10 +226,11 @@ const homeStructuredData = {
 
   .hero__badge {
     align-self: flex-start;
-    padding: 10px 18px;
+    padding: 8px 14px;
     border-radius: 999px;
-    background: rgba(99, 102, 241, 0.12);
-    color: rgba(199, 210, 254, 0.95);
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
     font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: 0.02em;
@@ -252,9 +238,9 @@ const homeStructuredData = {
 
   .hero__content {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: 36px;
-    align-items: stretch;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    align-items: start;
   }
 
   .hero__summary h1 {
@@ -269,21 +255,21 @@ const homeStructuredData = {
     font-size: 1.05rem;
     line-height: 1.7;
     margin: 0 0 24px;
-    max-width: 560px;
+    max-width: 640px;
   }
 
   .hero__actions {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
   }
 
   .action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 22px;
+    padding: 10px 18px;
     border-radius: var(--radius-sm);
     font-weight: 600;
     text-decoration: none;
@@ -296,26 +282,26 @@ const homeStructuredData = {
   }
 
   .action--primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-    color: white;
-    box-shadow: 0 18px 38px rgba(99, 102, 241, 0.35);
+    background: transparent;
+    border-color: var(--border-subtle);
+    color: var(--text-primary);
   }
 
   .action--primary:hover {
     transform: translateY(-1px);
-    box-shadow: 0 24px 48px rgba(99, 102, 241, 0.45);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.18);
   }
 
   .action--ghost {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: transparent;
+    border: none;
     color: var(--text-secondary);
   }
 
   .action--ghost:hover {
-    border-color: rgba(255, 255, 255, 0.18);
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.08);
+    text-decoration: underline;
   }
 
   .hero__stats {
@@ -346,65 +332,7 @@ const homeStructuredData = {
     color: var(--text-secondary);
   }
 
-  .hero__visual {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .hero__gradient {
-    position: absolute;
-    inset: 12%;
-    border-radius: var(--radius-lg);
-    background: radial-gradient(circle at 30% 20%, rgba(110, 126, 255, 0.45), rgba(85, 101, 207, 0.08));
-    filter: blur(12px);
-    z-index: -1;
-  }
-
-  .orbit-card {
-    padding: 32px;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(160deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.85));
-    border: 1px solid rgba(147, 197, 253, 0.18);
-    box-shadow: var(--shadow-soft);
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    max-width: 380px;
-  }
-
-  .orbit-card__tag {
-    align-self: flex-start;
-    padding: 6px 14px;
-    border-radius: 999px;
-    background: rgba(99, 102, 241, 0.2);
-    color: rgba(199, 210, 254, 0.95);
-    font-weight: 600;
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .orbit-card h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.3;
-  }
-
-  .orbit-card p {
-    margin: 0;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-
-  .orbit-card ul {
-    margin: 12px 0 0;
-    padding: 0 0 0 20px;
-    color: rgba(199, 210, 254, 0.85);
-    line-height: 1.6;
-  }
+  
 
   .section {
     margin-top: 120px;
@@ -459,12 +387,12 @@ const homeStructuredData = {
   .card {
     padding: 28px;
     border-radius: var(--radius-md);
-    background: rgba(11, 16, 32, 0.65);
-    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: transparent;
+    border: 1px solid rgba(148, 163, 184, 0.12);
     display: flex;
     flex-direction: column;
     gap: 14px;
-    box-shadow: 0 14px 36px rgba(2, 4, 10, 0.45);
+    box-shadow: none;
     transition:
       transform 0.25s ease,
       border-color 0.25s ease,
@@ -472,9 +400,9 @@ const homeStructuredData = {
   }
 
   .card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(148, 163, 184, 0.3);
-    box-shadow: 0 24px 48px rgba(2, 4, 10, 0.55);
+    transform: translateY(-2px);
+    border-color: rgba(148, 163, 184, 0.2);
+    box-shadow: none;
   }
 
   .card h3 {
@@ -503,7 +431,7 @@ const homeStructuredData = {
   }
 
   .card__link:hover {
-    border-color: rgba(199, 210, 254, 0.9);
+    border-color: rgba(199, 210, 254, 0.5);
   }
 
   .card__stack {
@@ -537,8 +465,8 @@ const homeStructuredData = {
   .writing-card {
     padding: 24px 26px;
     border-radius: var(--radius-md);
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    background: rgba(9, 12, 26, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    background: transparent;
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -549,9 +477,9 @@ const homeStructuredData = {
   }
 
   .writing-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(148, 163, 184, 0.3);
-    box-shadow: 0 18px 42px rgba(2, 4, 10, 0.5);
+    transform: translateY(-2px);
+    border-color: rgba(148, 163, 184, 0.2);
+    box-shadow: none;
   }
 
   .writing-card h3 {
@@ -577,18 +505,18 @@ const homeStructuredData = {
   .writing-card__cta {
     padding: 8px 14px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.06);
+    background: transparent;
     text-decoration: none;
     color: rgba(199, 210, 254, 0.95);
-    border: 1px solid transparent;
+    border: 1px solid rgba(148, 163, 184, 0.12);
     transition:
       background 0.2s ease,
       border-color 0.2s ease;
   }
 
   .writing-card__cta:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(199, 210, 254, 0.4);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(199, 210, 254, 0.24);
   }
 
   .section--contact {

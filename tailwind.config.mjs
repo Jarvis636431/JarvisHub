@@ -6,16 +6,27 @@ const config = {
   theme: {
     extend: {
       colors: {
-        background: "#0f172a",
-        accent: "#6366f1",
-        accentStrong: "#a855f7",
+        background: "#030712", // Deepest blue/black
+        surface: "#0f172a",    // Slate 900
+        primary: "#f8fafc",    // Slate 50
+        secondary: "#94a3b8",  // Slate 400
+        accent: {
+          cyan: "#22d3ee",     // Cyan 400
+          violet: "#a78bfa",   // Violet 400
+        },
+        midnight: "#020617",
       },
       fontFamily: {
-        display: ["Manrope", "Inter", "sans-serif"],
-        body: ["Inter", "system-ui", "sans-serif"],
+        display: ["Outfit", "sans-serif"],
+        body: ["Inter", "sans-serif"],
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'hero-glow': 'conic-gradient(from 180deg at 50% 50%, #2a8af6 0deg, #a853ba 180deg, #e92a67 360deg)',
       },
       boxShadow: {
-        "soft-glow": "0 24px 60px rgba(15, 23, 42, 0.45)",
+        "glass": "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+        "neon": "0 0 20px rgba(34, 211, 238, 0.5)",
       },
     },
   },
