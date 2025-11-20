@@ -14,10 +14,6 @@ export default defineConfig({
   site: SITE_URL,
   base: "/",
   trailingSlash: "never",
-  i18n: {
-    defaultLocale: "en",
-    locales: ["en", "zh"],
-  },
   integrations: [
     mdx(),
     sitemap(),

@@ -1,8 +1,6 @@
 ---
 import { SEO } from "astro-seo";
 import "../styles/global.css";
-import { getLangFromUrl, useTranslations } from "../i18n/utils";
-import { languages } from "../i18n/ui";
 
 type NavLink = { href: string; label: string };
 type StructuredData = Record<string, unknown> | Record<string, unknown>[];
@@ -38,28 +36,20 @@ interface LayoutProps {
   navLinks?: NavLink[];
   footerNote?: string;
   seo?: SeoConfig;
-  lang?: "en" | "zh";
 }
 
 const fallbackSite = "https://jarvishub.com";
 
 const {
   title = "Jarvis Hub - Creative Developer",
-  description = "Personal website of Jarvis Hub - crafting web experiences, writing, and sharing experiments in code.",
+  description = "Personal website of Jarvis - crafting web experiences, writing, and sharing experiments in code.",
+  navLinks = [
+    { href: "/projects", label: "Projects" },
+    { href: "/blog", label: "Writing" },
+  ],
   footerNote = "Built with Astro - Designed by Jarvis",
   seo,
-  lang = "en",
 } = Astro.props as LayoutProps;
-
-const t = useTranslations(lang);
-
-const navLinks = [
-  {
-    href: lang === "en" ? "/projects" : "/zh/projects",
-    label: t("nav.projects"),
-  },
-  { href: lang === "en" ? "/blog" : "/zh/blog", label: t("nav.blog") },
-];
 
 const requestUrl = Astro.url;
 const siteOrigin = Astro.site?.origin ?? requestUrl?.origin ?? fallbackSite;
@@ -104,9 +94,7 @@ const openGraph =
           description,
         },
         ...(Object.keys(articleData).length > 0
-          ? {
-              article: articleData,
-            }
+          ? { article: articleData }
           : {}),
       }
     : undefined;
@@ -131,7 +119,7 @@ const structuredData = seo?.structuredData;
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-smooth">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -144,7 +132,6 @@ const structuredData = seo?.structuredData;
       title="Jarvis Hub – Writing"
       href="/rss.xml"
     />
-
     <SEO
       title={title}
       description={description}
@@ -153,7 +140,6 @@ const structuredData = seo?.structuredData;
       openGraph={openGraph}
       twitter={twitterConfig}
     />
-
     {
       structuredData && (
         <script
@@ -187,26 +173,17 @@ const structuredData = seo?.structuredData;
       href="#main">Skip to content</a
     >
 
-    <!-- Language Switcher (Top Right) -->
-    <a
-      href={lang === "en" ? "/zh" : "/"}
-      class="fixed top-6 right-6 z-50 hidden md:flex items-center justify-center px-4 py-2 text-xs font-pixel text-white bg-black/50 backdrop-blur-md border border-white/20 rounded hover:border-accent-cyan hover:text-accent-cyan transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)] hover:shadow-[2px_2px_0px_0px_rgba(34,211,238,0.5)] hover:translate-y-[2px] hover:translate-x-[2px]"
-    >
-      [{lang === "en" ? "中文" : "EN"}]
-    </a>
-
     <header class="fixed top-6 left-0 right-0 z-40 flex justify-center px-4">
       <div class="glass-panel rounded-full px-6 py-3 flex items-center gap-8">
         <a
           class="font-display font-bold text-lg tracking-tight flex items-center gap-2 hover:text-accent-cyan transition-colors"
-          href={lang === "en" ? "/" : "/zh"}
+          href="/"
         >
           <span
             class="w-2 h-2 rounded-full bg-accent-cyan shadow-[0_0_10px_rgba(34,211,238,0.8)]"
           ></span>
           Jarvis Hub
         </a>
-
         <nav class="hidden md:flex items-center gap-6">
           {
             navLinks.map(({ href, label }) => (
@@ -219,13 +196,13 @@ const structuredData = seo?.structuredData;
               </a>
             ))
           }
-          <a
-            class="hidden md:inline-flex items-center justify-center px-4 py-1.5 text-sm font-semibold text-background bg-white rounded-full hover:bg-accent-cyan transition-colors duration-300"
-            href="#contact"
-          >
-            {t("nav.contact")}
-          </a>
         </nav>
+        <a
+          class="hidden md:inline-flex items-center justify-center px-4 py-1.5 text-sm font-semibold text-background bg-white rounded-full hover:bg-accent-cyan transition-colors duration-300"
+          href="#contact"
+        >
+          Let's talk
+        </a>
 
         <!-- Mobile Menu Button -->
         <button
@@ -282,7 +259,6 @@ const structuredData = seo?.structuredData;
       const menuBtn = document.getElementById("menu-btn");
       const mobileMenu = document.getElementById("mobile-menu");
       const mobileLinks = document.querySelectorAll(".mobile-link");
-
       let isMenuOpen = false;
 
       function toggleMenu() {
@@ -365,16 +341,16 @@ const structuredData = seo?.structuredData;
           >
             <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"
             ></span>
-            {t("footer.system")}
+            SYSTEM: ONLINE
           </div>
-          <div class="hidden sm:block text-white/30">{t("footer.latency")}</div>
+          <div class="hidden sm:block text-white/30">LATENCY: 24ms</div>
         </div>
 
         {/* Copyright */}
         <div
           class="text-[10px] font-pixel text-white/40 uppercase tracking-widest text-center"
         >
-          {t("footer.rights")}
+          © 2024 JARVIS_HUB // ALL RIGHTS RESERVED
         </div>
 
         {/* Social Links */}
@@ -385,15 +361,17 @@ const structuredData = seo?.structuredData;
             rel="noopener noreferrer"
             class="text-[10px] font-pixel text-secondary hover:text-accent-cyan transition-colors uppercase tracking-widest group"
           >
-            [GITHUB]
-            <span class="hidden group-hover:inline animate-pulse">_</span>
+            [GITHUB] <span class="hidden group-hover:inline animate-pulse"
+              >_</span
+            >
           </a>
           <a
             href="mailto:hello@jarvishub.com"
             class="text-[10px] font-pixel text-secondary hover:text-accent-cyan transition-colors uppercase tracking-widest group"
           >
-            [EMAIL]
-            <span class="hidden group-hover:inline animate-pulse">_</span>
+            [EMAIL] <span class="hidden group-hover:inline animate-pulse"
+              >_</span
+            >
           </a>
         </div>
       </div>
