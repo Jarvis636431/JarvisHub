@@ -17,7 +17,7 @@ const config = {
         midnight: "#020617",
       },
       fontFamily: {
-        display: ["Outfit", "sans-serif"],
+        display: ["Manrope", "Inter", "sans-serif"],
         body: ["Inter", "sans-serif"],
         pixel: ['"Press Start 2P"', "cursive"],
       },
