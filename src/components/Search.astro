@@ -1,0 +1,173 @@
+---
+// src/components/Search.astro
+---
+
+<dialog
+    id="search-dialog"
+    class="fixed inset-0 z-[100] w-full h-full max-w-none max-h-none bg-black/80 backdrop-blur-sm p-4 md:p-0 flex items-start justify-center pt-[15vh] opacity-0 pointer-events-none transition-opacity duration-200 open:opacity-100 open:pointer-events-auto m-0"
+>
+    <div
+        class="w-full max-w-2xl bg-surface border border-white/10 rounded-xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-200"
+        id="search-panel"
+    >
+        <!-- Search Input -->
+        <div class="relative border-b border-white/10">
+            <div
+                class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-secondary"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><circle cx="11" cy="11" r="8"></circle><path
+                        d="m21 21-4.3-4.3"></path></svg
+                >
+            </div>
+            <input
+                type="text"
+                id="search-input"
+                class="w-full bg-transparent text-white text-lg px-12 py-4 focus:outline-none placeholder:text-secondary/50 font-mono"
+                placeholder="Search commands..."
+                autocomplete="off"
+            />
+            <div class="absolute inset-y-0 right-4 flex items-center">
+                <kbd
+                    class="hidden md:inline-flex items-center gap-1 px-2 py-1 text-xs font-mono text-secondary bg-white/5 rounded border border-white/10"
+                >
+                    <span class="text-xs">ESC</span>
+                </kbd>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="max-h-[60vh] overflow-y-auto p-2" id="search-results">
+            <!-- Results will be injected here -->
+            <div class="p-8 text-center text-secondary font-mono text-sm">
+                Type to initiate search protocol...
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div
+            class="px-4 py-2 bg-black/20 border-t border-white/5 flex justify-between items-center text-[10px] text-secondary font-pixel uppercase"
+        >
+            <span>Fuse.js System</span>
+            <span>Index: Loaded</span>
+        </div>
+    </div>
+</dialog>
+
+<script>
+    import Fuse from "fuse.js";
+
+    let fuse: Fuse<any> | null = null;
+    const dialog = document.getElementById(
+        "search-dialog",
+    ) as HTMLDialogElement;
+    const input = document.getElementById("search-input") as HTMLInputElement;
+    const resultsContainer = document.getElementById("search-results");
+    const panel = document.getElementById("search-panel");
+
+    // Fetch index
+    async function loadIndex() {
+        if (fuse) return;
+        try {
+            const res = await fetch("/search-index.json");
+            const data = await res.json();
+            fuse = new Fuse(data, {
+                keys: ["title", "description", "tags"],
+                threshold: 0.4,
+                includeMatches: true,
+            });
+        } catch (e) {
+            console.error("Failed to load search index", e);
+        }
+    }
+
+    // Open/Close logic
+    function openSearch() {
+        loadIndex();
+        dialog?.showModal();
+        dialog?.classList.remove("opacity-0", "pointer-events-none");
+        panel?.classList.remove("scale-95");
+        panel?.classList.add("scale-100");
+        input?.focus();
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeSearch() {
+        dialog?.classList.add("opacity-0", "pointer-events-none");
+        panel?.classList.remove("scale-100");
+        panel?.classList.add("scale-95");
+        setTimeout(() => {
+            dialog?.close();
+            document.body.style.overflow = "";
+            if (input) input.value = "";
+            if (resultsContainer)
+                resultsContainer.innerHTML =
+                    '<div class="p-8 text-center text-secondary font-mono text-sm">Type to initiate search protocol...</div>';
+        }, 200);
+    }
+
+    // Event Listeners
+    window.addEventListener("keydown", (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+            e.preventDefault();
+            if (dialog?.open) closeSearch();
+            else openSearch();
+        }
+        if (e.key === "Escape" && dialog?.open) {
+            closeSearch();
+        }
+    });
+
+    dialog?.addEventListener("click", (e) => {
+        if (e.target === dialog) closeSearch();
+    });
+
+    // Expose open function globally for the header button
+    (window as any).openSearch = openSearch;
+
+    // Search Logic
+    input?.addEventListener("input", (e) => {
+        if (!fuse || !resultsContainer) return;
+        const query = (e.target as HTMLInputElement).value;
+
+        if (!query) {
+            resultsContainer.innerHTML =
+                '<div class="p-8 text-center text-secondary font-mono text-sm">Type to initiate search protocol...</div>';
+            return;
+        }
+
+        const results = fuse.search(query);
+
+        if (results.length === 0) {
+            resultsContainer.innerHTML =
+                '<div class="p-8 text-center text-secondary font-mono text-sm">No matching records found in database.</div>';
+            return;
+        }
+
+        const html = results
+            .map((result) => {
+                const item = result.item;
+                return `
+        <a href="${item.slug}" class="block p-3 rounded-lg hover:bg-white/5 group transition-colors border border-transparent hover:border-white/10">
+          <div class="flex items-center justify-between mb-1">
+            <h4 class="text-white font-bold group-hover:text-accent-cyan transition-colors">${item.title}</h4>
+            <span class="text-[10px] font-pixel uppercase text-secondary/50 bg-white/5 px-1.5 py-0.5 rounded">${item.collection}</span>
+          </div>
+          <p class="text-sm text-secondary line-clamp-1 font-mono">${item.description}</p>
+        </a>
+      `;
+            })
+            .join("");
+
+        resultsContainer.innerHTML = html;
+    });
+</script>

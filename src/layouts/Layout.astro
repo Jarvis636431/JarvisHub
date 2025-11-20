@@ -1,6 +1,7 @@
 ---
 import { SEO } from "astro-seo";
 import "../styles/global.css";
+import Search from "../components/Search.astro";
 
 type NavLink = { href: string; label: string };
 type StructuredData = Record<string, unknown> | Record<string, unknown>[];
@@ -197,6 +198,27 @@ const structuredData = seo?.structuredData;
             ))
           }
         </nav>
+
+        <button
+          onclick="window.openSearch()"
+          class="hidden md:flex items-center justify-center text-secondary hover:text-accent-cyan transition-colors"
+          aria-label="Search"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"
+            ></path></svg
+          >
+        </button>
+
         <a
           class="hidden md:inline-flex items-center justify-center px-4 py-1.5 text-sm font-semibold text-background bg-white rounded-full hover:bg-accent-cyan transition-colors duration-300"
           href="#contact"
@@ -251,6 +273,26 @@ const structuredData = seo?.structuredData;
         >
           INITIATE_CONTACT
         </a>
+
+        <button
+          onclick="window.openSearch()"
+          class="mt-4 text-secondary hover:text-white flex items-center gap-2 font-pixel text-xs uppercase"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"
+            ></path></svg
+          >
+          [SEARCH_DATABASE]
+        </button>
       </nav>
     </div>
 
@@ -374,5 +416,5 @@ const structuredData = seo?.structuredData;
         </div>
       </div>
     </footer>
-  </body>
+  </body><Search />
 </html>
