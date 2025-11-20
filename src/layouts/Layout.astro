@@ -255,6 +255,7 @@ const structuredData = seo?.structuredData;
     </div>
 
     <script>
+      // Mobile Menu Logic
       const menuBtn = document.getElementById("menu-btn");
       const mobileMenu = document.getElementById("mobile-menu");
       const mobileLinks = document.querySelectorAll(".mobile-link");
@@ -292,6 +293,26 @@ const structuredData = seo?.structuredData;
         link.addEventListener("click", () => {
           if (isMenuOpen) toggleMenu();
         });
+      });
+
+      // Scroll Reveal Observer
+      const observerOptions = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("reveal-visible");
+            observer.unobserve(entry.target); // Only animate once
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".reveal-on-scroll").forEach((el) => {
+        observer.observe(el);
       });
     </script>
 

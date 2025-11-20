@@ -17,6 +17,25 @@
 
   body {
     @apply bg-background text-slate-50 font-body antialiased selection:bg-accent-cyan/30 selection:text-accent-cyan;
+    cursor: crosshair;
+  }
+
+  a,
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  /* Scroll Reveal Animation Classes */
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.5, 0, 0, 1);
+  }
+
+  .reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   h1,
