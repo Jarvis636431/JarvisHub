@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig } from "astro/config";
-import image from "@astrojs/image";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
@@ -20,7 +19,6 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false,
     }),
-    image(),
     robotsTxt({
       policy: [
         {
@@ -61,11 +59,6 @@ export default defineConfig({
         "@content": "/src/content",
         "@styles": "/src/styles",
       },
-    },
-  },
-  image: {
-    service: {
-      entrypoint: "@astrojs/image/squoosh",
     },
   },
 });
