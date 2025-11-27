@@ -147,7 +147,7 @@ if (project.data.externalUrl) {
       <div class="project__content-grid">
         <aside class="project__toc">
           <div class="project__toc-title">目录</div>
-          <nav id="project-toc" class="project__toc-list"></nav>
+          <nav id="project-toc" class="project__toc-list" aria-label="On-page navigation"></nav>
         </aside>
         <div class="project__article" id="project-article">
           <div class="prose-pixel">
@@ -322,6 +322,12 @@ if (project.data.externalUrl) {
     background: rgba(34, 211, 238, 0.06);
   }
 
+  .project__toc-item:focus-visible {
+    outline: 2px solid #22d3ee;
+    outline-offset: 2px;
+    background: rgba(34, 211, 238, 0.06);
+  }
+
   .project__toc-sub {
     padding-left: 18px;
     font-size: 0.88rem;
@@ -415,8 +421,12 @@ if (project.data.externalUrl) {
           const link = toc.querySelector(`.project__toc-item[data-id="${id}"]`);
           if (link) {
             if (entry.isIntersecting) {
-              links.forEach((l) => l.classList.remove("active"));
+              links.forEach((l) => {
+                l.classList.remove("active");
+                l.removeAttribute("aria-current");
+              });
               link.classList.add("active");
+              link.setAttribute("aria-current", "true");
             }
           }
         });

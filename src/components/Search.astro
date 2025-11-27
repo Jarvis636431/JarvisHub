@@ -4,6 +4,9 @@
 
 <dialog
     id="search-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Site Search"
     class="fixed inset-0 z-[100] w-full h-full max-w-none max-h-none bg-black/60 backdrop-blur-[2px] p-0 flex items-start justify-center opacity-0 pointer-events-none transition-opacity duration-300 open:opacity-100 open:pointer-events-auto m-0"
 >
     <div
@@ -36,6 +39,7 @@
                 class="w-full h-full bg-transparent text-white text-lg pl-16 pr-16 focus:outline-none placeholder:text-secondary/50 font-mono opacity-0 transition-opacity duration-300 delay-100"
                 placeholder="Search commands..."
                 autocomplete="off"
+                aria-controls="search-results"
             />
             <div class="absolute right-4 flex items-center">
                 <kbd
@@ -193,6 +197,28 @@
 
     dialog?.addEventListener("click", (e) => {
         if (e.target === dialog) closeSearch();
+    });
+    dialog?.addEventListener("keydown", (e) => {
+        if (e.key !== "Tab") return;
+        const focusable = dialog.querySelectorAll(
+            "a[href], button, input, select, textarea, [tabindex]:not([tabindex='-1'])"
+        );
+        const elements = Array.from(focusable) as HTMLElement[];
+        if (elements.length === 0) return;
+        const first = elements[0];
+        const last = elements[elements.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+        if (e.shiftKey) {
+            if (active === first || active === dialog) {
+                e.preventDefault();
+                last.focus();
+            }
+        } else {
+            if (active === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        }
     });
 
     // Expose open function globally for the header button

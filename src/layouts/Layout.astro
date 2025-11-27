@@ -214,17 +214,26 @@ const structuredData = seo?.structuredData;
           ></span>
           Jarvis Hub
         </a>
-        <nav class="hidden md:flex items-center gap-6">
+        <nav class="hidden md:flex items-center gap-6" aria-label="Primary">
           {
-            navLinks.map(({ href, label }) => (
-              <a
-                href={href}
-                class="text-sm font-medium text-secondary hover:text-white transition-colors relative group"
-              >
-                {label}
-                <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-accent-cyan to-accent-violet transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))
+            navLinks.map(({ href, label }) => {
+              const currentPath = Astro.url.pathname;
+              const isActive = currentPath === href || currentPath.startsWith(`${href}/`);
+              return (
+                <a
+                  href={href}
+                  aria-current={isActive ? "page" : undefined}
+                  class={`text-sm font-medium transition-colors relative group ${
+                    isActive ? "text-white" : "text-secondary hover:text-white"
+                  }`}
+                >
+                  {label}
+                  <span class={`absolute -bottom-1 left-0 h-[2px] bg-gradient-to-r from-accent-cyan to-accent-violet transition-all duration-300 ${
+                    isActive ? "w-full" : "w-0 group-hover:w-full"
+                  }`} />
+                </a>
+              );
+            })
           }
         </nav>
 
