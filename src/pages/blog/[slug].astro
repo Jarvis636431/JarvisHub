@@ -161,10 +161,19 @@ if (post.data.tags.length > 0) {
       }
     </header>
 
-    {/* Content Section */}
-    <div class="prose-pixel">
-      <Content />
-    </div>
+    <section>
+      <div class="blog__content-grid">
+        <aside class="blog__toc">
+          <div class="blog__toc-title">目录</div>
+          <nav id="blog-toc" class="blog__toc-list"></nav>
+        </aside>
+        <div class="blog__article" id="blog-article">
+          <div class="prose-pixel">
+            <Content />
+          </div>
+        </div>
+      </div>
+    </section>
 
     {/* Footer / End of Log */}
     <div
@@ -177,4 +186,122 @@ if (post.data.tags.length > 0) {
       </span>
     </div>
   </article>
+  <style>
+    .blog__content-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .blog__toc {
+      position: sticky;
+      top: 120px;
+      align-self: start;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(11, 16, 32, 0.6);
+      border-radius: 16px;
+      padding: 12px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 10px 30px rgba(167,139,250,0.12);
+    }
+
+    .blog__toc-title {
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(148, 163, 184, 0.7);
+      margin: 6px 8px 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed rgba(148,163,184,0.18);
+    }
+
+    .blog__toc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 60vh;
+      overflow: auto;
+    }
+
+    .blog__toc-item {
+      display: block;
+      padding: 8px 12px;
+      border-left: 2px solid transparent;
+      color: rgba(203, 213, 225, 0.9);
+      text-decoration: none;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .blog__toc-item::before {
+      content: ">";
+      margin-right: 8px;
+      color: #a78bfa;
+    }
+
+    .blog__toc-item.active {
+      border-left-color: #22d3ee;
+      color: #22d3ee;
+      background: rgba(34, 211, 238, 0.06);
+    }
+
+    .blog__toc-sub {
+      padding-left: 18px;
+      font-size: 0.88rem;
+      color: rgba(148, 163, 184, 0.85);
+    }
+
+    .blog__article h2,
+    .blog__article h3 {
+      scroll-margin-top: 120px;
+    }
+
+    @media (max-width: 720px) {
+      .blog__content-grid {
+        grid-template-columns: 1fr;
+      }
+      .blog__toc {
+        position: static;
+        top: auto;
+      }
+    }
+  </style>
+  <script>
+    const articleEl = document.getElementById("blog-article");
+    const tocEl = document.getElementById("blog-toc");
+    if (articleEl && tocEl) {
+      const headings = Array.from(articleEl.querySelectorAll("h2, h3"));
+      const slugify = (s) => s.toLowerCase().trim().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
+      const items = [];
+      headings.forEach((h) => {
+        const text = h.textContent || "";
+        const id = h.id || slugify(text);
+        if (!h.id) h.id = id;
+        items.push({ id, depth: h.tagName === "H2" ? 2 : 3, text });
+      });
+      const html = items
+        .map((i) => `<a href="#${i.id}" class="blog__toc-item ${i.depth === 3 ? "blog__toc-sub" : ""}" data-id="${i.id}">${i.text}</a>`)
+        .join("");
+      tocEl.innerHTML = html;
+      const links = Array.from(tocEl.querySelectorAll(".blog__toc-item"));
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const id = entry.target.id;
+            const link = tocEl.querySelector(`.blog__toc-item[data-id="${id}"]`);
+            if (link) {
+              if (entry.isIntersecting) {
+                links.forEach((l) => l.classList.remove("active"));
+                link.classList.add("active");
+              }
+            }
+          });
+        },
+        { rootMargin: "0px 0px -60% 0px", threshold: 0.1 }
+      );
+      headings.forEach((h) => observer.observe(h));
+    }
+  </script>
 </Layout>
