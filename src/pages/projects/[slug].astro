@@ -144,7 +144,9 @@ if (project.data.externalUrl) {
     </header>
 
     <section class="project__content">
-      <Content />
+      <div class="prose-pixel">
+        <Content />
+      </div>
     </section>
   </article>
 </Layout>
@@ -250,24 +252,6 @@ if (project.data.externalUrl) {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    line-height: 1.7;
-    color: rgba(226, 232, 240, 0.95);
-  }
-
-  .project__content h2,
-  .project__content h3 {
-    margin-top: 2em;
-    margin-bottom: 0.6em;
-  }
-
-  .project__content p {
-    margin: 0 0 1em;
-  }
-
-  .project__content ul,
-  .project__content ol {
-    padding-left: 1.4em;
-    margin: 0 0 1em;
   }
 
   .status {

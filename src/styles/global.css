@@ -210,6 +210,113 @@
       clip: rect(90px, 9999px, 10px, 0);
     }
   }
+
+  .prose-pixel {
+    color: #cbd5e1;
+    font-family: "Inter", sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+
+  .prose-pixel h1,
+  .prose-pixel h2,
+  .prose-pixel h3,
+  .prose-pixel h4 {
+    font-family: "Press Start 2P", cursive;
+    color: #fff;
+    margin-top: 2.5em;
+    margin-bottom: 1em;
+    line-height: 1.4;
+  }
+
+  .prose-pixel h2 {
+    font-size: 1.5rem;
+    border-bottom: 2px solid rgba(34, 211, 238, 0.3);
+    padding-bottom: 0.5em;
+    display: inline-block;
+  }
+
+  .prose-pixel h3 {
+    font-size: 1.1rem;
+    color: #22d3ee;
+  }
+
+  .prose-pixel p {
+    margin-bottom: 1.5em;
+  }
+
+  .prose-pixel a {
+    color: #22d3ee;
+    text-decoration: none;
+    border-bottom: 2px solid rgba(34, 211, 238, 0.3);
+    transition: all 0.2s;
+  }
+
+  .prose-pixel a:hover {
+    background: rgba(34, 211, 238, 0.1);
+    border-color: #22d3ee;
+  }
+
+  .prose-pixel ul,
+  .prose-pixel ol {
+    margin-bottom: 1.5em;
+    padding-left: 1.5em;
+  }
+
+  .prose-pixel li {
+    margin-bottom: 0.5em;
+    position: relative;
+  }
+
+  .prose-pixel ul li::before {
+    content: ">";
+    position: absolute;
+    left: -1.5em;
+    color: #a78bfa;
+    font-family: monospace;
+    font-weight: bold;
+  }
+
+  .prose-pixel blockquote {
+    border-left: 4px solid #a78bfa;
+    background: rgba(167, 139, 250, 0.05);
+    padding: 1em 1.5em;
+    margin-bottom: 1.5em;
+    font-style: italic;
+    color: #e2e8f0;
+  }
+
+  .prose-pixel code {
+    font-family: "Menlo", "Monaco", "Courier New", monospace;
+    font-size: 0.9em;
+    background: #000;
+    color: #22d3ee;
+    padding: 0.2em 0.4em;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .prose-pixel pre {
+    background: #020617;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5em;
+    overflow-x: auto;
+    margin-bottom: 2em;
+    box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 0.05);
+  }
+
+  .prose-pixel pre code {
+    background: transparent;
+    border: none;
+    color: inherit;
+    padding: 0;
+  }
+
+  .prose-pixel img {
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    margin: 2em 0;
+    width: 100%;
+    height: auto;
+  }
 }
 
 @layer utilities {
