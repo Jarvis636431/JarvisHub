@@ -70,6 +70,24 @@ if (coverImageUrl) {
 if (project.data.externalUrl) {
   projectStructuredData.sameAs = [project.data.externalUrl];
 }
+// Compute previous/next projects (sorted by publishDate desc)
+const allProjects = (
+  await getCollection("projects", ({ data }) =>
+    import.meta.env.DEV ? true : data.status !== "archived",
+  )
+)
+  .slice()
+  .sort(
+    (a, b) =>
+      new Date(b.data.publishDate).getTime() -
+      new Date(a.data.publishDate).getTime(),
+  );
+const currentIndex = allProjects.findIndex((p) => p.slug === project.slug);
+const prevProject = currentIndex > 0 ? allProjects[currentIndex - 1] : undefined;
+const nextProject =
+  currentIndex < allProjects.length - 1
+    ? allProjects[currentIndex + 1]
+    : undefined;
 ---
 
 <Layout
@@ -156,6 +174,52 @@ if (project.data.externalUrl) {
         </div>
       </div>
     </section>
+    {
+      (prevProject || nextProject) && (
+        <nav aria-label="项目导航" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            prevProject && (
+              <a
+                href={`/projects/${prevProject.slug}`}
+                class="group block px-4 py-4 bg-white/5 border border-white/10 rounded-lg hover:border-accent-cyan transition-colors"
+              >
+                <div class="text-[10px] font-pixel text-secondary uppercase mb-1">
+                  上一个项目
+                </div>
+                <div class="flex items-center justify-between gap-2">
+                  <h3 class="text-white font-semibold group-hover:text-accent-cyan transition-colors">
+                    {prevProject.data.title}
+                  </h3>
+                  <span class="text-[10px] font-pixel text-white/40">
+                    {new Date(prevProject.data.publishDate).toLocaleDateString("en-US", { year: "numeric", month: "long" })}
+                  </span>
+                </div>
+              </a>
+            )
+          }
+          {
+            nextProject && (
+              <a
+                href={`/projects/${nextProject.slug}`}
+                class="group block px-4 py-4 bg-white/5 border border-white/10 rounded-lg hover:border-accent-violet transition-colors"
+              >
+                <div class="text-[10px] font-pixel text-secondary uppercase mb-1">
+                  下一个项目
+                </div>
+                <div class="flex items-center justify-between gap-2">
+                  <h3 class="text-white font-semibold group-hover:text-accent-violet transition-colors">
+                    {nextProject.data.title}
+                  </h3>
+                  <span class="text-[10px] font-pixel text-white/40">
+                    {new Date(nextProject.data.publishDate).toLocaleDateString("en-US", { year: "numeric", month: "long" })}
+                  </span>
+                </div>
+              </a>
+            )
+          }
+        </nav>
+      )
+    }
   </article>
 </Layout>
 

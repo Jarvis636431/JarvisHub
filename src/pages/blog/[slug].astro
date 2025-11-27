@@ -69,6 +69,22 @@ if (heroImageUrl) {
 if (post.data.tags.length > 0) {
   articleStructuredData.keywords = post.data.tags.join(", ");
 }
+// Compute previous/next posts (sorted by publishDate desc)
+const allPosts = (
+  await getCollection("blog", ({ data }) =>
+    import.meta.env.DEV ? true : data.draft !== true,
+  )
+)
+  .slice()
+  .sort(
+    (a, b) =>
+      new Date(b.data.publishDate).getTime() -
+      new Date(a.data.publishDate).getTime(),
+  );
+const currentIndex = allPosts.findIndex((p) => p.slug === post.slug);
+const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
+const nextPost =
+  currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : undefined;
 ---
 
 <Layout
@@ -179,6 +195,55 @@ if (post.data.tags.length > 0) {
     <div
       class="mt-16 pt-8 border-t-2 border-dashed border-white/10 text-center"
     >
+      {
+        (prevPost || nextPost) && (
+          <nav
+            aria-label="文章导航"
+            class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-left"
+          >
+            {
+              prevPost && (
+                <a
+                  href={`/blog/${prevPost.slug}`}
+                  class="group block px-4 py-4 bg-white/5 border border-white/10 rounded-lg hover:border-accent-cyan transition-colors"
+                >
+                  <div class="text-[10px] font-pixel text-secondary uppercase mb-1">
+                    上一篇
+                  </div>
+                  <div class="flex items-center justify-between gap-2">
+                    <h3 class="text-white font-semibold group-hover:text-accent-cyan transition-colors">
+                      {prevPost.data.title}
+                    </h3>
+                    <span class="text-[10px] font-pixel text-white/40">
+                      {new Date(prevPost.data.publishDate).toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit" })}
+                    </span>
+                  </div>
+                </a>
+              )
+            }
+            {
+              nextPost && (
+                <a
+                  href={`/blog/${nextPost.slug}`}
+                  class="group block px-4 py-4 bg-white/5 border border-white/10 rounded-lg hover:border-accent-violet transition-colors"
+                >
+                  <div class="text-[10px] font-pixel text-secondary uppercase mb-1">
+                    下一篇
+                  </div>
+                  <div class="flex items-center justify-between gap-2">
+                    <h3 class="text-white font-semibold group-hover:text-accent-violet transition-colors">
+                      {nextPost.data.title}
+                    </h3>
+                    <span class="text-[10px] font-pixel text-white/40">
+                      {new Date(nextPost.data.publishDate).toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit" })}
+                    </span>
+                  </div>
+                </a>
+              )
+            }
+          </nav>
+        )
+      }
       <span
         class="inline-block px-4 py-2 bg-white/5 text-xs font-pixel text-secondary animate-pulse"
       >
