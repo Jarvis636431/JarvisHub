@@ -6,20 +6,20 @@ const config = {
   theme: {
     extend: {
       colors: {
-        background: "#030712", // Deepest blue/black
-        surface: "#0f172a",    // Slate 900
-        primary: "#f8fafc",    // Slate 50
-        secondary: "#94a3b8",  // Slate 400
+        background: "#f6f4ef",
+        surface: "#ffffff",
+        primary: "#1f1f1f",
+        secondary: "#6b6b6b",
         accent: {
-          cyan: "#22d3ee",     // Cyan 400
-          violet: "#a78bfa",   // Violet 400
+          cyan: "#2f6f6d",
+          violet: "#c59a6d",
         },
-        midnight: "#020617",
+        midnight: "#1f1f1f",
       },
       fontFamily: {
-        display: ["Manrope", "Inter", "sans-serif"],
-        body: ["Inter", "sans-serif"],
-        pixel: ['"Press Start 2P"', "cursive"],
+        display: ['"Space Grotesk"', "sans-serif"],
+        body: ['"Newsreader"', "serif"],
+        pixel: ['"IBM Plex Mono"', "monospace"],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

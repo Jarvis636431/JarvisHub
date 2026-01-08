@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) =>
-    import.meta.env.DEV ? true : data.draft !== true,
+    import.meta.env.DEV ? true : data.draft !== true
   );
   return posts.map((post) => ({
     params: { slug: post.slug },
@@ -22,7 +22,7 @@ const publishDate = new Date(post.data.publishDate).toLocaleDateString(
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  },
+  }
 );
 const readingTime = post.data.readingTime ?? 6;
 
@@ -72,14 +72,14 @@ if (post.data.tags.length > 0) {
 // Compute previous/next posts (sorted by publishDate desc)
 const allPosts = (
   await getCollection("blog", ({ data }) =>
-    import.meta.env.DEV ? true : data.draft !== true,
+    import.meta.env.DEV ? true : data.draft !== true
   )
 )
   .slice()
   .sort(
     (a, b) =>
       new Date(b.data.publishDate).getTime() -
-      new Date(a.data.publishDate).getTime(),
+      new Date(a.data.publishDate).getTime()
   );
 const currentIndex = allPosts.findIndex((p) => p.slug === post.slug);
 const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
@@ -105,54 +105,37 @@ const nextPost =
     structuredData: articleStructuredData,
   }}
 >
-  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    {/* Header Section */}
-    <header class="mb-16 space-y-8 border-b-4 border-white/10 pb-12 relative">
-      <div
-        class="absolute top-0 right-0 text-[10px] font-pixel text-white/20 hidden md:block"
-      >
-        DOC_ID: {post.slug.toUpperCase()}
-      </div>
-
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <header class="mb-12 space-y-6 border-b border-black/10 pb-8">
       <a
         href="/blog"
-        class="inline-flex items-center gap-2 text-xs font-pixel text-accent-cyan hover:text-accent-violet transition-colors uppercase tracking-widest group"
+        class="inline-flex items-center gap-2 text-sm text-secondary hover:text-primary transition-colors"
       >
-        <span class="group-hover:-translate-x-1 transition-transform"
-          >{"<-"}</span
-        >
-        ACCESS_ARCHIVE
+        <span>{"<-"}</span>
+        Back to writing
       </a>
 
-      <div class="space-y-4">
+      <div class="space-y-3">
         <div class="flex flex-wrap gap-4 text-xs font-mono text-secondary">
-          <span class="px-2 py-1 bg-white/5 border border-white/10">
-            > LOG_DATE: {publishDate}
-          </span>
-          <span class="px-2 py-1 bg-white/5 border border-white/10">
-            > EST_READ: {readingTime} MIN
-          </span>
+          <span>{publishDate}</span>
+          <span>{readingTime} min read</span>
         </div>
 
-        <h1
-          class="text-3xl md:text-5xl lg:text-6xl font-bold font-pixel leading-tight text-white drop-shadow-[4px_4px_0px_rgba(167,139,250,0.5)]"
-        >
+        <h1 class="text-3xl md:text-5xl font-display leading-tight">
           {post.data.title}
         </h1>
 
-        <p
-          class="text-xl md:text-2xl text-secondary font-light leading-relaxed border-l-4 border-accent-cyan pl-6"
-        >
+        <p class="text-lg text-secondary leading-relaxed">
           {post.data.description}
         </p>
       </div>
 
       {
         post.data.tags.length > 0 && (
-          <div class="flex flex-wrap gap-3">
+          <div class="flex flex-wrap gap-2">
             {post.data.tags.map((tag) => (
-              <span class="px-3 py-1 bg-accent-violet/10 border border-accent-violet/30 text-accent-violet text-xs font-pixel uppercase">
-                #{tag}
+              <span class="px-3 py-1 bg-black/5 text-secondary text-xs rounded-full">
+                {tag}
               </span>
             ))}
           </div>
@@ -161,17 +144,13 @@ const nextPost =
 
       {
         post.data.heroImage && (
-          <div class="relative mt-8 group">
-            <div class="absolute inset-0 bg-accent-cyan/20 translate-x-2 translate-y-2 group-hover:translate-x-3 group-hover:translate-y-3 transition-transform duration-300" />
+          <div class="relative mt-6">
             <img
-              class="relative w-full h-auto border-2 border-white/20 image-pixelated grayscale group-hover:grayscale-0 transition-all duration-500"
+              class="w-full h-auto border border-black/10 rounded-xl"
               src={post.data.heroImage}
               alt={post.data.title}
               loading="eager"
             />
-            <div class="absolute bottom-0 right-0 bg-black/80 px-4 py-2 border-t-2 border-l-2 border-white/20 text-[10px] font-pixel text-white">
-              IMG_SOURCE: EXTERNAL
-            </div>
           </div>
         )
       }
@@ -192,69 +171,63 @@ const nextPost =
     </section>
 
     {/* Footer / End of Log */}
-    <div
-      class="mt-16 pt-8 border-t-2 border-dashed border-white/10 text-center"
-    >
+    <div class="mt-16 pt-8 border-t border-black/10 text-center">
       {
         (prevPost || nextPost) && (
           <nav
             aria-label="文章导航"
             class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-left"
           >
-            {
-              prevPost && (
-                <a
-                  href={`/blog/${prevPost.slug}`}
-                  class="group block px-4 py-4 bg-white/5 border border-white/10 rounded-lg hover:border-accent-cyan transition-colors"
-                >
-                  <div class="text-[10px] font-pixel text-secondary uppercase mb-1">
-                    上一篇
-                  </div>
-                  <div class="flex items-center justify-between gap-2">
-                    <h3 class="text-white font-semibold group-hover:text-accent-cyan transition-colors">
-                      {prevPost.data.title}
-                    </h3>
-                    <span class="text-[10px] font-pixel text-white/40">
-                      {new Date(prevPost.data.publishDate).toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit" })}
-                    </span>
-                  </div>
-                </a>
-              )
-            }
-            {
-              nextPost && (
-                <a
-                  href={`/blog/${nextPost.slug}`}
-                  class="group block px-4 py-4 bg-white/5 border border-white/10 rounded-lg hover:border-accent-violet transition-colors"
-                >
-                  <div class="text-[10px] font-pixel text-secondary uppercase mb-1">
-                    下一篇
-                  </div>
-                  <div class="flex items-center justify-between gap-2">
-                    <h3 class="text-white font-semibold group-hover:text-accent-violet transition-colors">
-                      {nextPost.data.title}
-                    </h3>
-                    <span class="text-[10px] font-pixel text-white/40">
-                      {new Date(nextPost.data.publishDate).toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit" })}
-                    </span>
-                  </div>
-                </a>
-              )
-            }
+            {prevPost && (
+              <a
+                href={`/blog/${prevPost.slug}`}
+                class="group block px-4 py-4 bg-surface border border-black/10 rounded-lg hover:border-accent-cyan transition-colors"
+              >
+                <div class="text-xs text-secondary uppercase mb-1">上一篇</div>
+                <div class="flex items-center justify-between gap-2">
+                  <h3 class="text-primary font-semibold group-hover:text-accent-cyan transition-colors">
+                    {prevPost.data.title}
+                  </h3>
+                  <span class="text-xs text-secondary">
+                    {new Date(prevPost.data.publishDate).toLocaleDateString(
+                      "en-US",
+                      { year: "numeric", month: "2-digit", day: "2-digit" }
+                    )}
+                  </span>
+                </div>
+              </a>
+            )}
+            {nextPost && (
+              <a
+                href={`/blog/${nextPost.slug}`}
+                class="group block px-4 py-4 bg-surface border border-black/10 rounded-lg hover:border-accent-violet transition-colors"
+              >
+                <div class="text-xs text-secondary uppercase mb-1">下一篇</div>
+                <div class="flex items-center justify-between gap-2">
+                  <h3 class="text-primary font-semibold group-hover:text-accent-violet transition-colors">
+                    {nextPost.data.title}
+                  </h3>
+                  <span class="text-xs text-secondary">
+                    {new Date(nextPost.data.publishDate).toLocaleDateString(
+                      "en-US",
+                      { year: "numeric", month: "2-digit", day: "2-digit" }
+                    )}
+                  </span>
+                </div>
+              </a>
+            )}
           </nav>
         )
       }
-      <span
-        class="inline-block px-4 py-2 bg-white/5 text-xs font-pixel text-secondary animate-pulse"
-      >
-        *** END OF TRANSMISSION ***
+      <span class="inline-block text-xs text-secondary">
+        End of post
       </span>
     </div>
   </article>
   <style>
     .blog__content-grid {
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 220px 1fr;
       gap: 24px;
       align-items: start;
     }
@@ -263,22 +236,21 @@ const nextPost =
       position: sticky;
       top: 120px;
       align-self: start;
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      background: rgba(11, 16, 32, 0.6);
-      border-radius: 16px;
+      border: 1px solid rgba(31, 31, 31, 0.08);
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 12px;
       padding: 12px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 10px 30px rgba(167,139,250,0.12);
+      box-shadow: 0 8px 20px rgba(31, 31, 31, 0.04);
     }
 
     .blog__toc-title {
-      font-size: 0.9rem;
-      letter-spacing: 0.12em;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: rgba(148, 163, 184, 0.7);
+      color: rgba(31, 31, 31, 0.45);
       margin: 6px 8px 10px;
       padding-bottom: 8px;
-      border-bottom: 1px dashed rgba(148,163,184,0.18);
+      border-bottom: 1px solid rgba(31, 31, 31, 0.08);
     }
 
     .blog__toc-list {
@@ -293,7 +265,7 @@ const nextPost =
       display: block;
       padding: 8px 12px;
       border-left: 2px solid transparent;
-      color: rgba(203, 213, 225, 0.9);
+      color: rgba(31, 31, 31, 0.7);
       text-decoration: none;
       font-size: 0.95rem;
       border-radius: 8px;
@@ -301,21 +273,21 @@ const nextPost =
     }
 
     .blog__toc-item::before {
-      content: ">";
+      content: "•";
       margin-right: 8px;
-      color: #a78bfa;
+      color: rgba(31, 31, 31, 0.35);
     }
 
     .blog__toc-item.active {
-      border-left-color: #22d3ee;
-      color: #22d3ee;
-      background: rgba(34, 211, 238, 0.06);
+      border-left-color: #2f6f6d;
+      color: #2f6f6d;
+      background: rgba(47, 111, 109, 0.06);
     }
 
     .blog__toc-sub {
       padding-left: 18px;
       font-size: 0.88rem;
-      color: rgba(148, 163, 184, 0.85);
+      color: rgba(31, 31, 31, 0.6);
     }
 
     .blog__article h2,
@@ -338,7 +310,12 @@ const nextPost =
     const tocEl = document.getElementById("blog-toc");
     if (articleEl && tocEl) {
       const headings = Array.from(articleEl.querySelectorAll("h2, h3"));
-      const slugify = (s) => s.toLowerCase().trim().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
+      const slugify = (s) =>
+        s
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
+          .replace(/^-+|-+$/g, "");
       const items = [];
       headings.forEach((h) => {
         const text = h.textContent || "";
@@ -347,7 +324,10 @@ const nextPost =
         items.push({ id, depth: h.tagName === "H2" ? 2 : 3, text });
       });
       const html = items
-        .map((i) => `<a href="#${i.id}" class="blog__toc-item ${i.depth === 3 ? "blog__toc-sub" : ""}" data-id="${i.id}">${i.text}</a>`)
+        .map(
+          (i) =>
+            `<a href="#${i.id}" class="blog__toc-item ${i.depth === 3 ? "blog__toc-sub" : ""}" data-id="${i.id}">${i.text}</a>`
+        )
         .join("");
       tocEl.innerHTML = html;
       const links = Array.from(tocEl.querySelectorAll(".blog__toc-item"));
@@ -355,7 +335,9 @@ const nextPost =
         (entries) => {
           entries.forEach((entry) => {
             const id = entry.target.id;
-            const link = tocEl.querySelector(`.blog__toc-item[data-id="${id}"]`);
+            const link = tocEl.querySelector(
+              `.blog__toc-item[data-id="${id}"]`
+            );
             if (link) {
               if (entry.isIntersecting) {
                 links.forEach((l) => l.classList.remove("active"));

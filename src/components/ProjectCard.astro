@@ -19,7 +19,7 @@ const linkLabel = project.data.externalUrl ? "VISIT_SITE" : "READ_LOG";
 ---
 
 <a
-  class="group relative flex flex-col gap-4 bg-black border-2 border-white/20 hover:border-accent-cyan transition-colors duration-0 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.1)] hover:shadow-[4px_4px_0px_0px_rgba(34,211,238,1)] hover:-translate-y-1 hover:-translate-x-1 overflow-hidden"
+  class="group relative flex flex-col gap-4 bg-surface border border-black/10 rounded-lg hover:border-accent-cyan transition-colors overflow-hidden"
   href={link}
 >
   {
@@ -34,23 +34,22 @@ const linkLabel = project.data.externalUrl ? "VISIT_SITE" : "READ_LOG";
           loading="lazy"
           class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
       </div>
     )
   }
 
   <div class="p-6 flex flex-col gap-4 flex-1">
     <div
-      class="flex items-center justify-between gap-4 text-xs font-pixel text-secondary/80"
+      class="flex items-center justify-between gap-4 text-xs font-mono text-secondary"
     >
       <span
-        class={`px-2 py-1 border ${
+        class={`px-2 py-1 rounded-full border ${
           project.data.status === "launched"
-            ? "bg-green-900/30 border-green-500 text-green-400"
+            ? "bg-green-100 border-green-300 text-green-700"
             : project.data.status === "in-progress"
-              ? "bg-yellow-900/30 border-yellow-500 text-yellow-400"
-              : "bg-slate-800 border-slate-500 text-slate-400"
-        } uppercase`}
+              ? "bg-amber-100 border-amber-300 text-amber-700"
+              : "bg-black/5 border-black/10 text-secondary"
+        }`}
       >
         {project.data.status}
       </span>
@@ -59,12 +58,12 @@ const linkLabel = project.data.externalUrl ? "VISIT_SITE" : "READ_LOG";
 
     <div>
       <h3
-        class="text-xl md:text-2xl font-bold mb-3 font-pixel leading-tight group-hover:text-accent-cyan transition-colors"
+        class="text-xl font-display leading-tight text-primary group-hover:text-accent-cyan transition-colors"
       >
         {project.data.title}
       </h3>
       <p
-        class="text-secondary leading-relaxed font-mono text-sm border-l-2 border-white/10 pl-3 group-hover:border-accent-cyan/50 transition-colors"
+        class="text-secondary leading-relaxed text-sm"
       >
         {project.data.summary}
       </p>
@@ -73,27 +72,21 @@ const linkLabel = project.data.externalUrl ? "VISIT_SITE" : "READ_LOG";
     {
       project.data.roles.length > 0 && (
         <p class="text-xs font-mono text-secondary/70 uppercase tracking-wider">
-          > Roles: {project.data.roles.join(", ")}
+          Roles: {project.data.roles.join(", ")}
         </p>
       )
     }
 
     {
       project.data.stack.length > 0 && (
-        <ul class="flex flex-wrap gap-2 mt-auto pt-4 border-t-2 border-white/10 border-dashed">
+        <ul class="flex flex-wrap gap-2 mt-auto pt-4 border-t border-black/5">
           {project.data.stack.map((item) => (
-            <li class="px-2 py-1 bg-white/5 text-[10px] font-pixel text-secondary group-hover:text-white transition-colors uppercase">
+            <li class="px-2 py-1 bg-black/5 text-[11px] text-secondary rounded-full">
               {item}
             </li>
           ))}
         </ul>
       )
     }
-
-    <div
-      class="pt-2 mt-2 flex items-center justify-end text-accent-cyan font-pixel text-[10px] uppercase group-hover:text-accent-violet transition-colors"
-    >
-      [{linkLabel}] <span class="ml-2 animate-pulse">_</span>
-    </div>
   </div>
 </a>

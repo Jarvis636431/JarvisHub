@@ -6,90 +6,21 @@ import Layout from "@layouts/Layout.astro";
     title="404: Signal Lost - Jarvis Hub"
     description="System failure. Signal lost."
 >
-    <div
-        class="min-h-[80vh] flex flex-col items-center justify-center relative overflow-hidden px-4"
-    >
-        {/* CRT Scanline Overlay */}
-        <div
-            class="absolute inset-0 pointer-events-none z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%]"
-        >
-        </div>
-
-        <div class="relative z-10 text-center space-y-8">
-            <div class="relative inline-block">
-                <h1
-                    class="text-9xl md:text-[12rem] font-bold font-pixel text-white glitch-text"
-                    data-text="404"
-                >
-                    404
-                </h1>
-                <div
-                    class="absolute -inset-4 border-2 border-accent-cyan/30 border-dashed animate-pulse"
-                >
-                </div>
-            </div>
-
-            <div class="space-y-4">
-                <h2
-                    class="text-2xl md:text-4xl font-pixel text-accent-cyan animate-pulse"
-                >
-                    SIGNAL LOST
-                </h2>
-                <p class="text-secondary font-mono text-lg max-w-md mx-auto">
-                    > SYSTEM_FAILURE: The requested data sector could not be
-                    located. It may have been corrupted or moved to a secure
-                    archive.
-                </p>
-            </div>
-
-            <div class="pt-8">
-                <a
-                    href="/"
-                    class="inline-flex items-center gap-3 px-8 py-4 bg-accent-cyan/10 border-2 border-accent-cyan text-accent-cyan font-pixel hover:bg-accent-cyan hover:text-black transition-all duration-300 group"
-                >
-                    <span class="w-2 h-2 bg-current animate-pulse"></span>
-                    REBOOT SYSTEM
-                </a>
-            </div>
-        </div>
-
-        {/* Background Noise */}
-        <div
-            class="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay"
-        >
-            <div class="absolute inset-0 bg-[url('/noise.png')] animate-noise">
-            </div>
+    <div class="min-h-[70vh] flex flex-col items-center justify-center px-4">
+        <div class="text-center space-y-6 max-w-md">
+            <p class="text-sm uppercase tracking-widest text-secondary font-mono">
+                404
+            </p>
+            <h1 class="text-4xl md:text-5xl font-display">Page not found</h1>
+            <p class="text-secondary">
+                The page you're looking for doesn't exist or has moved.
+            </p>
+            <a
+                href="/"
+                class="inline-flex items-center px-6 py-2.5 bg-primary text-background rounded-full text-sm font-medium hover:bg-accent-cyan hover:text-white transition-colors"
+            >
+                Back to home
+            </a>
         </div>
     </div>
 </Layout>
-
-<style>
-    .glitch-text {
-        position: relative;
-        text-shadow:
-            4px 4px 0px #ef4444,
-            -4px -4px 0px #22d3ee;
-        animation: glitch-skew 3s infinite linear alternate-reverse;
-    }
-
-    @keyframes glitch-skew {
-        0% {
-            transform: skew(0deg);
-        }
-        20% {
-            transform: skew(-2deg);
-        }
-        40% {
-            transform: skew(2deg);
-        }
-        60% {
-            transform: skew(-1deg);
-        }
-        80% {
-            transform: skew(1deg);
-        }
-        100% {
-            transform: skew(0deg);
-        }
-    }
-</style>

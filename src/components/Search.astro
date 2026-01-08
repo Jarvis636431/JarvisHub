@@ -7,12 +7,12 @@
     role="dialog"
     aria-modal="true"
     aria-label="Site Search"
-    class="fixed inset-0 z-[100] w-full h-full max-w-none max-h-none bg-black/60 backdrop-blur-[2px] p-0 flex items-start justify-center opacity-0 pointer-events-none transition-opacity duration-300 open:opacity-100 open:pointer-events-auto m-0"
+    class="fixed inset-0 z-[100] w-full h-full max-w-none max-h-none bg-black/20 backdrop-blur-[2px] p-0 flex items-start justify-center opacity-0 pointer-events-none transition-opacity duration-300 open:opacity-100 open:pointer-events-auto m-0"
 >
     <div
-        class="relative mt-6 w-[min(90vw,600px)] bg-surface border border-white/10 shadow-2xl overflow-hidden origin-top"
+        class="relative mt-6 w-[min(90vw,600px)] bg-surface border border-black/10 shadow-lg overflow-hidden origin-top"
         id="search-panel"
-        style="border-radius: 9999px; height: 56px; transition: border-radius 0.1s cubic-bezier(0.23, 1, 0.32, 1), height 0.5s cubic-bezier(0.23, 1, 0.32, 1);"
+        style="border-radius: 20px; height: 56px; transition: border-radius 0.1s cubic-bezier(0.23, 1, 0.32, 1), height 0.5s cubic-bezier(0.23, 1, 0.32, 1);"
     >
         <!-- Search Input -->
         <div class="relative h-14 flex items-center">
@@ -36,14 +36,14 @@
             <input
                 type="text"
                 id="search-input"
-                class="w-full h-full bg-transparent text-white text-lg pl-16 pr-16 focus:outline-none placeholder:text-secondary/50 font-mono opacity-0 transition-opacity duration-300 delay-100"
-                placeholder="Search commands..."
+                class="w-full h-full bg-transparent text-primary text-lg pl-16 pr-16 focus:outline-none placeholder:text-secondary/60 font-mono opacity-0 transition-opacity duration-300 delay-100"
+                placeholder="Search..."
                 autocomplete="off"
                 aria-controls="search-results"
             />
             <div class="absolute right-4 flex items-center">
                 <kbd
-                    class="hidden md:inline-flex items-center gap-1 px-2 py-1 text-xs font-mono text-secondary bg-white/5 rounded border border-white/10 opacity-0 transition-opacity duration-300 delay-100"
+                    class="hidden md:inline-flex items-center gap-1 px-2 py-1 text-xs font-mono text-secondary bg-black/5 rounded border border-black/10 opacity-0 transition-opacity duration-300 delay-100"
                     id="esc-hint"
                 >
                     <span class="text-xs">ESC</span>
@@ -53,21 +53,21 @@
 
         <!-- Results -->
         <div
-            class="opacity-0 transition-opacity duration-300 delay-150 border-t border-white/10"
+            class="opacity-0 transition-opacity duration-300 delay-150 border-t border-black/10"
             id="search-content"
         >
             <div class="max-h-[60vh] overflow-y-auto p-2" id="search-results">
                 <div class="p-8 text-center text-secondary font-mono text-sm">
-                    Type to initiate search protocol...
+                    Start typing to search.
                 </div>
             </div>
 
             <!-- Footer -->
             <div
-                class="px-4 py-2 bg-black/20 border-t border-white/5 flex justify-between items-center text-[10px] text-secondary font-pixel uppercase"
+                class="px-4 py-2 bg-black/5 border-t border-black/10 flex justify-between items-center text-[10px] text-secondary uppercase"
             >
-                <span>Fuse.js System</span>
-                <span>Index: Loaded</span>
+                <span>Fuse.js</span>
+                <span>Index ready</span>
             </div>
         </div>
     </div>
@@ -126,7 +126,7 @@
             // Second RAF: Actually trigger the animation
             requestAnimationFrame(() => {
                 if (panel) {
-                    panel.style.borderRadius = "12px";
+                    panel.style.borderRadius = "16px";
                     panel.style.height = "400px"; // Fixed height instead of auto
                 }
                 // Fade in contents with slight delay
@@ -154,7 +154,7 @@
         // Wait a bit, then shrink panel
         setTimeout(() => {
             if (panel) {
-                panel.style.borderRadius = "9999px";
+                panel.style.borderRadius = "20px";
                 panel.style.height = "56px";
             }
         }, 100);
@@ -179,7 +179,7 @@
             if (input) input.value = "";
             if (resultsContainer)
                 resultsContainer.innerHTML =
-                    '<div class="p-8 text-center text-secondary font-mono text-sm">Type to initiate search protocol...</div>';
+                    '<div class="p-8 text-center text-secondary font-mono text-sm">Start typing to search.</div>';
         }, 600); // Wait for all animations to complete
     }
 
@@ -231,7 +231,7 @@
 
         if (!query) {
             resultsContainer.innerHTML =
-                '<div class="p-8 text-center text-secondary font-mono text-sm">Type to initiate search protocol...</div>';
+                '<div class="p-8 text-center text-secondary font-mono text-sm">Start typing to search.</div>';
             return;
         }
 
@@ -239,7 +239,7 @@
 
         if (results.length === 0) {
             resultsContainer.innerHTML =
-                '<div class="p-8 text-center text-secondary font-mono text-sm">No matching records found in database.</div>';
+                '<div class="p-8 text-center text-secondary font-mono text-sm">No results found.</div>';
             return;
         }
 
@@ -247,10 +247,10 @@
             .map((result) => {
                 const item = result.item;
                 return `
-        <a href="${item.slug}" class="block p-3 rounded-lg hover:bg-white/5 group transition-colors border border-transparent hover:border-white/10">
+        <a href="${item.slug}" class="block p-3 rounded-lg hover:bg-black/5 group transition-colors border border-transparent hover:border-black/10">
           <div class="flex items-center justify-between mb-1">
-            <h4 class="text-white font-bold group-hover:text-accent-cyan transition-colors">${item.title}</h4>
-            <span class="text-[10px] font-pixel uppercase text-secondary/50 bg-white/5 px-1.5 py-0.5 rounded">${item.collection}</span>
+            <h4 class="text-primary font-semibold group-hover:text-accent-cyan transition-colors">${item.title}</h4>
+            <span class="text-[10px] uppercase text-secondary/60 bg-black/5 px-1.5 py-0.5 rounded">${item.collection}</span>
           </div>
           <p class="text-sm text-secondary line-clamp-1 font-mono">${item.description}</p>
         </a>
