@@ -10,7 +10,7 @@ const slugify = (value) =>
     .normalize("NFKD")
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
+    .replace(/[^\p{L}\p{N}]+/gu, "-")
     .replace(/^-+|-+$/g, "") || "post";
 
 const formatDate = (date = new Date()) =>
@@ -65,6 +65,8 @@ const run = async () => {
     return;
   }
 
+  input.setEncoding("utf8");
+  output.setDefaultEncoding("utf8");
   const rl = readline.createInterface({ input, output });
   const title = (await rl.question("Post title: ")).trim();
   const suggestedSlug = slugify(title);
