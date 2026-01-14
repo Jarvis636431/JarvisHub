@@ -159,7 +159,12 @@ const nextPost =
 
     <section>
       <div class="blog__content-grid">
-        <Toc prefix="blog" articleId="blog-article" tocId="blog-toc" />
+        <Toc
+          prefix="blog"
+          articleId="blog-article"
+          tocId="blog-toc"
+          ariaLabel="On-page navigation"
+        />
         <div class="blog__article" id="blog-article">
           <div class="prose-pixel">
             <Content />
@@ -279,6 +284,12 @@ const nextPost =
     .blog__toc-item.active {
       border-left-color: #2f6f6d;
       color: #2f6f6d;
+      background: rgba(47, 111, 109, 0.06);
+    }
+
+    .blog__toc-item:focus-visible {
+      outline: 2px solid #2f6f6d;
+      outline-offset: 2px;
       background: rgba(47, 111, 109, 0.06);
     }
 
