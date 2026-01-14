@@ -106,150 +106,175 @@ const nextPost =
     structuredData: articleStructuredData,
   }}
 >
-  <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <header class="mb-12 space-y-6 border-b border-black/10 pb-8">
-      <a
-        href="/blog"
-        class="inline-flex items-center gap-2 text-sm text-secondary hover:text-primary transition-colors"
-      >
-        <span>{"<-"}</span>
-        Back to writing
-      </a>
+  <article class="w-full py-12">
+    <div class="blog__page-grid">
+      <header class="blog__header space-y-6 border-b border-black/10 pb-8">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 text-sm text-secondary hover:text-primary transition-colors"
+        >
+          <span>{"<-"}</span>
+          Back to writing
+        </a>
 
-      <div class="space-y-3">
-        <div class="flex flex-wrap gap-4 text-xs font-mono text-secondary">
-          <span>{publishDate}</span>
-          <span>{readingTime} min read</span>
+        <div class="space-y-3">
+          <div class="flex flex-wrap gap-4 text-xs font-mono text-secondary">
+            <span>{publishDate}</span>
+            <span>{readingTime} min read</span>
+          </div>
+
+          <h1 class="text-3xl md:text-5xl font-display leading-tight">
+            {post.data.title}
+          </h1>
+
+          <p class="text-lg text-secondary leading-relaxed">
+            {post.data.description}
+          </p>
         </div>
 
-        <h1 class="text-3xl md:text-5xl font-display leading-tight">
-          {post.data.title}
-        </h1>
+        {
+          post.data.tags.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              {post.data.tags.map((tag) => (
+                <span class="px-3 py-1 bg-black/5 text-secondary text-xs rounded-full">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )
+        }
 
-        <p class="text-lg text-secondary leading-relaxed">
-          {post.data.description}
-        </p>
-      </div>
+        {
+          post.data.heroImage && (
+            <div class="relative mt-6">
+              <img
+                class="w-full h-auto border border-black/10 rounded-xl"
+                src={post.data.heroImage}
+                alt={post.data.title}
+                loading="eager"
+              />
+            </div>
+          )
+        }
+      </header>
 
-      {
-        post.data.tags.length > 0 && (
-          <div class="flex flex-wrap gap-2">
-            {post.data.tags.map((tag) => (
-              <span class="px-3 py-1 bg-black/5 text-secondary text-xs rounded-full">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )
-      }
-
-      {
-        post.data.heroImage && (
-          <div class="relative mt-6">
-            <img
-              class="w-full h-auto border border-black/10 rounded-xl"
-              src={post.data.heroImage}
-              alt={post.data.title}
-              loading="eager"
-            />
-          </div>
-        )
-      }
-    </header>
-
-    <section>
-      <div class="blog__content-grid">
+      <div class="blog__toc-col">
         <Toc
           prefix="blog"
           articleId="blog-article"
           tocId="blog-toc"
           ariaLabel="On-page navigation"
         />
-        <div class="blog__article" id="blog-article">
-          <div class="prose-pixel">
-            <Content />
-          </div>
+      </div>
+      <div class="blog__article" id="blog-article">
+        <div class="prose-pixel">
+          <Content />
         </div>
       </div>
-    </section>
+      <div class="blog__spacer" aria-hidden="true"></div>
 
-    {/* Footer / End of Log */}
-    <div class="mt-16 pt-8 border-t border-black/10 text-center">
-      {
-        (prevPost || nextPost) && (
-          <nav
-            aria-label="文章导航"
-            class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-left"
-          >
-            {prevPost && (
-              <a
-                href={`/blog/${prevPost.slug}`}
-                class="group block px-4 py-4 bg-surface border border-black/10 rounded-lg hover:border-accent-cyan transition-colors"
-              >
-                <div class="text-xs text-secondary uppercase mb-1">上一篇</div>
-                <div class="flex items-center justify-between gap-2">
-                  <h3 class="text-primary font-semibold group-hover:text-accent-cyan transition-colors">
-                    {prevPost.data.title}
-                  </h3>
-                  <span class="text-xs text-secondary">
-                    {new Date(prevPost.data.publishDate).toLocaleDateString(
-                      "en-US",
-                      { year: "numeric", month: "2-digit", day: "2-digit" }
-                    )}
-                  </span>
-                </div>
-              </a>
-            )}
-            {nextPost && (
-              <a
-                href={`/blog/${nextPost.slug}`}
-                class="group block px-4 py-4 bg-surface border border-black/10 rounded-lg hover:border-accent-violet transition-colors"
-              >
-                <div class="text-xs text-secondary uppercase mb-1">下一篇</div>
-                <div class="flex items-center justify-between gap-2">
-                  <h3 class="text-primary font-semibold group-hover:text-accent-violet transition-colors">
-                    {nextPost.data.title}
-                  </h3>
-                  <span class="text-xs text-secondary">
-                    {new Date(nextPost.data.publishDate).toLocaleDateString(
-                      "en-US",
-                      { year: "numeric", month: "2-digit", day: "2-digit" }
-                    )}
-                  </span>
-                </div>
-              </a>
-            )}
-          </nav>
-        )
-      }
-      <span class="inline-block text-xs text-secondary">
-        End of post
-      </span>
+      {/* Footer / End of Log */}
+      <div class="blog__footer mt-16 pt-8 border-t border-black/10 text-center">
+        {
+          (prevPost || nextPost) && (
+            <nav
+              aria-label="文章导航"
+              class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-left"
+            >
+              {prevPost && (
+                <a
+                  href={`/blog/${prevPost.slug}`}
+                  class="group block px-4 py-4 bg-surface border border-black/10 rounded-lg hover:border-accent-cyan transition-colors"
+                >
+                  <div class="text-xs text-secondary uppercase mb-1">
+                    上一篇
+                  </div>
+                  <div class="flex items-center justify-between gap-2">
+                    <h3 class="text-primary font-semibold group-hover:text-accent-cyan transition-colors">
+                      {prevPost.data.title}
+                    </h3>
+                    <span class="text-xs text-secondary">
+                      {new Date(prevPost.data.publishDate).toLocaleDateString(
+                        "en-US",
+                        { year: "numeric", month: "2-digit", day: "2-digit" }
+                      )}
+                    </span>
+                  </div>
+                </a>
+              )}
+              {nextPost && (
+                <a
+                  href={`/blog/${nextPost.slug}`}
+                  class="group block px-4 py-4 bg-surface border border-black/10 rounded-lg hover:border-accent-violet transition-colors"
+                >
+                  <div class="text-xs text-secondary uppercase mb-1">
+                    下一篇
+                  </div>
+                  <div class="flex items-center justify-between gap-2">
+                    <h3 class="text-primary font-semibold group-hover:text-accent-violet transition-colors">
+                      {nextPost.data.title}
+                    </h3>
+                    <span class="text-xs text-secondary">
+                      {new Date(nextPost.data.publishDate).toLocaleDateString(
+                        "en-US",
+                        { year: "numeric", month: "2-digit", day: "2-digit" }
+                      )}
+                    </span>
+                  </div>
+                </a>
+              )}
+            </nav>
+          )
+        }
+        <span class="inline-block text-xs text-secondary"> End of post </span>
+      </div>
     </div>
   </article>
   <style>
-    .blog__content-grid {
+    .blog__page-grid {
       display: grid;
-      grid-template-columns: minmax(200px, 240px) minmax(0, 1fr);
+      grid-template-columns: minmax(200px, 240px) minmax(0, 1fr) minmax(
+          160px,
+          240px
+        );
       gap: 40px;
       align-items: start;
     }
 
+    .blog__header,
     .blog__article {
-      width: 100%;
       max-width: 720px;
-      justify-self: center;
+      grid-column: 2;
       min-width: 0;
     }
 
-    .blog__article h2,
-    .blog__article h3 {
-      scroll-margin-top: 120px;
+    .blog__toc-col {
+      grid-column: 1;
+      position: sticky;
+      top: 120px;
+      align-self: start;
+      height: fit-content;
+    }
+
+    .blog__spacer {
+      grid-column: 3;
+      min-height: 1px;
+    }
+
+    .blog__footer {
+      grid-column: 2;
     }
 
     @media (max-width: 720px) {
-      .blog__content-grid {
+      .blog__page-grid {
         grid-template-columns: 1fr;
+      }
+      .blog__header,
+      .blog__article,
+      .blog__toc-col,
+      .blog__spacer,
+      .blog__footer {
+        grid-column: auto;
       }
     }
   </style>

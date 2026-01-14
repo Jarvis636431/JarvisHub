@@ -155,7 +155,8 @@ const structuredData = seo?.structuredData;
   >
     <div
       class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(47,111,109,0.12),transparent_55%),radial-gradient(circle_at_bottom_right,rgba(197,154,109,0.12),transparent_50%)]"
-    ></div>
+    >
+    </div>
     <a
       class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 px-4 py-2 bg-surface text-primary rounded-md border border-black/10"
       href="#main">Skip to content</a
@@ -165,24 +166,32 @@ const structuredData = seo?.structuredData;
       id="main-header"
       class="sticky top-0 z-40 border-b border-black/10 bg-background/90 backdrop-blur transition-opacity duration-300"
     >
-      <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-6">
+      <div
+        class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-6"
+      >
         <a
           class="font-display font-semibold text-lg tracking-tight hover:text-accent-cyan transition-colors"
           href="/"
         >
           Jarvis Hub
         </a>
-        <nav class="hidden md:flex items-center gap-6 text-sm" aria-label="Primary">
+        <nav
+          class="hidden md:flex items-center gap-6 text-sm"
+          aria-label="Primary"
+        >
           {
             navLinks.map(({ href, label }) => {
               const currentPath = Astro.url.pathname;
-              const isActive = currentPath === href || currentPath.startsWith(`${href}/`);
+              const isActive =
+                currentPath === href || currentPath.startsWith(`${href}/`);
               return (
                 <a
                   href={href}
                   aria-current={isActive ? "page" : undefined}
                   class={`transition-colors ${
-                    isActive ? "text-primary" : "text-secondary hover:text-primary"
+                    isActive
+                      ? "text-primary"
+                      : "text-secondary hover:text-primary"
                   }`}
                 >
                   {label}
@@ -230,8 +239,7 @@ const structuredData = seo?.structuredData;
               <span
                 class="w-full h-0.5 bg-primary transition-all duration-300 origin-left"
               ></span>
-              <span
-                class="w-full h-0.5 bg-primary transition-all duration-300"
+              <span class="w-full h-0.5 bg-primary transition-all duration-300"
               ></span>
               <span
                 class="w-full h-0.5 bg-primary transition-all duration-300 origin-left"
@@ -247,7 +255,9 @@ const structuredData = seo?.structuredData;
       id="mobile-menu"
       class="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300"
     >
-      <nav class="flex flex-col items-center gap-6 bg-surface border border-black/10 rounded-2xl px-10 py-8 shadow-lg">
+      <nav
+        class="flex flex-col items-center gap-6 bg-surface border border-black/10 rounded-2xl px-10 py-8 shadow-lg"
+      >
         {
           navLinks.map(({ href, label }) => (
             <a
@@ -327,16 +337,13 @@ const structuredData = seo?.structuredData;
           if (isMenuOpen) toggleMenu();
         });
       });
-
     </script>
 
     <main id="main" class="flex-1 px-4 md:px-8 max-w-6xl mx-auto w-full">
       <slot />
     </main>
 
-    <footer
-      class="border-t border-black/10 mt-20"
-    >
+    <footer class="border-t border-black/10 mt-20">
       <div
         class="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-secondary"
       >
