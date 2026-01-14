@@ -16,52 +16,148 @@ const subClass = `${prefix}__toc-sub`;
 
 <aside class={tocClass}>
   <div class={titleClass}>{title}</div>
-  <nav id={tocId} class={listClass} aria-label={ariaLabel}></nav>
+  <nav
+    id={tocId}
+    class={listClass}
+    aria-label={ariaLabel}
+  ></nav>
 </aside>
 
-<script define:vars={{ articleId, tocId, itemClass, subClass }}>
-  const article = document.getElementById(articleId);
-  const toc = document.getElementById(tocId);
-  if (article && toc) {
-    const headings = Array.from(article.querySelectorAll("h2, h3"));
-    const slugify = (s) =>
-      s
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-    const items = [];
-    headings.forEach((h) => {
-      const text = h.textContent || "";
-      const id = h.id || slugify(text);
-      if (!h.id) h.id = id;
-      items.push({ id, depth: h.tagName === "H2" ? 2 : 3, text });
-    });
-    const html = items
-      .map(
-        (i) =>
-          `<a href="#${i.id}" class="${itemClass} ${i.depth === 3 ? subClass : ""}" data-id="${i.id}">${i.text}</a>`
-      )
-      .join("");
-    toc.innerHTML = html;
-    const links = Array.from(toc.querySelectorAll(`.${itemClass}`));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const id = entry.target.id;
-          const link = toc.querySelector(`.${itemClass}[data-id="${id}"]`);
-          if (link && entry.isIntersecting) {
-            links.forEach((l) => {
-              l.classList.remove("active");
-              l.removeAttribute("aria-current");
-            });
-            link.classList.add("active");
-            link.setAttribute("aria-current", "true");
-          }
-        });
-      },
-      { rootMargin: "0px 0px -60% 0px", threshold: 0.1 }
-    );
-    headings.forEach((h) => observer.observe(h));
+<script is:inline define:vars={{ articleId, tocId, itemClass, subClass }}>
+  const runToc = () => {
+    const article = document.getElementById(articleId);
+    const toc = document.getElementById(tocId);
+    if (article && toc) {
+      const headings = Array.from(article.querySelectorAll("h1, h2, h3"));
+      const slugify = (s) =>
+        s
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+      const items = [];
+      headings.forEach((h) => {
+        const text = h.textContent || "";
+        const id = h.id || slugify(text);
+        if (!h.id) h.id = id;
+        const depth =
+          h.tagName === "H1" ? 1 : h.tagName === "H2" ? 2 : 3;
+        items.push({ id, depth, text });
+      });
+      const html = items
+        .map(
+          (i) =>
+            `<a href="#${i.id}" class="${itemClass} ${i.depth === 3 ? subClass : ""}" data-id="${i.id}">${i.text}</a>`
+        )
+        .join("");
+      toc.innerHTML = html;
+      const links = Array.from(toc.querySelectorAll(`.${itemClass}`));
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const id = entry.target.id;
+            const link = toc.querySelector(`.${itemClass}[data-id="${id}"]`);
+            if (link && entry.isIntersecting) {
+              links.forEach((l) => {
+                l.classList.remove("active");
+                l.removeAttribute("aria-current");
+              });
+              link.classList.add("active");
+              link.setAttribute("aria-current", "true");
+            }
+          });
+        },
+        { rootMargin: "0px 0px -60% 0px", threshold: 0.1 }
+      );
+      headings.forEach((h) => observer.observe(h));
+    }
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", runToc, { once: true });
+  } else {
+    runToc();
   }
 </script>
+
+<style>
+  .blog__toc,
+  .project__toc {
+    position: sticky;
+    top: 120px;
+    align-self: start;
+    border: 1px solid rgba(31, 31, 31, 0.08);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 8px 20px rgba(31, 31, 31, 0.04);
+  }
+
+  .blog__toc-title,
+  .project__toc-title {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(31, 31, 31, 0.45);
+    margin: 6px 8px 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(31, 31, 31, 0.08);
+  }
+
+  .blog__toc-list,
+  .project__toc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 60vh;
+    overflow: auto;
+  }
+
+  .blog__toc-item,
+  .project__toc-item {
+    display: block;
+    padding: 8px 12px;
+    border-left: 2px solid transparent;
+    color: rgba(31, 31, 31, 0.7);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+  }
+
+  .blog__toc-item::before,
+  .project__toc-item::before {
+    content: "•";
+    margin-right: 8px;
+    color: rgba(31, 31, 31, 0.35);
+  }
+
+  .blog__toc-item.active,
+  .project__toc-item.active {
+    border-left-color: #2f6f6d;
+    color: #2f6f6d;
+    background: rgba(47, 111, 109, 0.06);
+  }
+
+  .blog__toc-item:focus-visible,
+  .project__toc-item:focus-visible {
+    outline: 2px solid #2f6f6d;
+    outline-offset: 2px;
+    background: rgba(47, 111, 109, 0.06);
+  }
+
+  .blog__toc-sub,
+  .project__toc-sub {
+    padding-left: 18px;
+    font-size: 0.88rem;
+    color: rgba(31, 31, 31, 0.6);
+  }
+
+  @media (max-width: 720px) {
+    .blog__toc,
+    .project__toc {
+      position: static;
+      top: auto;
+    }
+  }
+</style>
