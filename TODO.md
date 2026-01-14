@@ -24,3 +24,27 @@
 - [ ] **彩蛋模式**
   - 根据时间 (如深夜) 自动切换特殊背景 (星空/代码雨)。
 
+## 待办任务 (Pending Tasks)
+
+- [ ] **Supabase 配置**
+  - 完成数据库 Table 设置和 RPC 函数配置 (用于浏览量统计)。
+  - 解决 Server 端口占用问题。
+
+## 已完成 (Completed)
+
+### 首页重构与增强
+
+- [x] **Bento Grid 布局优化**
+  - 移除旧版 "About Me" 代码片段展示。
+  - 替换为 GitHub Contribution Heatmap (动态年份)。
+  - 优化 "Intro Card": 极简自我介绍 ("Hi, I'm Jarvis")，移除 "Available for hire" 标签，增加网格背景。
+  - 替换 Twitter 卡片为 "Music/Vibe" 卡片 (Spotify 风格，动态音频条)。
+- [x] **交互动效**
+  - **Spotlight Effect**: 鼠标跟随的高光聚光灯效果。
+  - **Staggered Entrance**: 卡片交错入场动画。
+  - **Infinite Marquee**: Toolkit 卡片技术栈图标无限滚动 (修复了滚动失效问题)。
+  - **View Counter**: 集成 Supabase 浏览量统计 (UI 已就绪)。
+- [x] **功能模块**
+  - 移除 "Say Hi" 模块 (简化交互)。
+  - 集成 CMD+K 全局搜索 (基于 Fuse.js)。
+  - 创建 Supabase 客户端配置 (`src/lib/supabase.ts`, `.env`)。
