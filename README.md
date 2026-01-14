@@ -1,46 +1,102 @@
-# Astro Starter Kit: Basics
+# Jarvis Hub
 
-```sh
-npm create astro@latest -- --template basics
+A modern, high-performance personal portfolio and digital garden built with [Astro](https://astro.build). Designed for speed, clarity, and ease of content management.
+
+## ✨ Features
+
+- **Framework**: Built on Astro v5 for lightning-fast performance (Islands Architecture).
+- **Styling**: Tailwind CSS for a utility-first, responsive design system.
+- **Content**: Type-safe content management using Astro Content Collections (MDX & Markdown).
+- **Search**: Integrated client-side fuzzy search with Fuse.js.
+- **Automation**: Custom CLI scripts for generating new content templates.
+- **Deployment**: Optimized for Vercel.
+
+## 🚀 Getting Started
+
+This project uses [pnpm](https://pnpm.io/) as the package manager.
+
+### Installation
+
+```bash
+git clone https://github.com/yourusername/JarvisHub.git
+cd JarvisHub
+pnpm install
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### Development
 
-## 🚀 Project Structure
+Start the local development server:
 
-Inside of your Astro project, you'll see the following folders and files:
+```bash
+pnpm dev
+```
+
+The site will be available at `http://localhost:4321`.
+
+## 📝 Content Management
+
+### Creating New Posts
+
+The project includes a helper script to quickly scaffold new blog posts with the correct frontmatter.
+
+```bash
+# Interactive mode
+pnpm new:post
+
+# Command line arguments mode
+pnpm new:post -- --title "My New Post" --template mdx
+```
+
+This will create a new file in `src/content/blog/` with the current date and default fields.
+
+### Content Collections
+
+#### Blog (`src/content/blog`)
+
+Schema fields defined in `src/content/config.ts`:
+
+- `title` (string): Post title
+- `description` (string): Short summary (min 10 chars)
+- `publishDate` (date): Publication date
+- `tags` (array): List of tags
+- `draft` (boolean): If true, hidden in production
+- `readingTime` (number): Estimated reading time in minutes
+
+#### Projects (`src/content/projects`)
+
+Schema fields defined in `src/content/config.ts`:
+
+- `title` (string): Project name
+- `summary` (string): Brief overview
+- `status` (enum): 'in-progress' | 'launched' | 'archived'
+- `stack` (array): Technologies used
+- `featured` (boolean): Whether to show on the homepage
+- `externalUrl` (url): Link to the live project
+- `coverImage` (string): Path to project cover image
+
+## 📂 Project Structure
 
 ```text
 /
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+├── public/            # Static assets (images, favicon)
+├── scripts/           # Automation scripts (new-post.js)
+├── src/
+│   ├── components/    # Reusable UI components (BlogCard, ProjectCard, etc.)
+│   ├── content/       # MDX/Markdown content sources
+│   ├── layouts/       # Page layouts
+│   ├── pages/         # Astro routes and pages
+│   └── styles/        # Global styles
+├── astro.config.mjs   # Astro configuration
+└── tailwind.config.mjs # Tailwind configuration
 ```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
 
 ## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
+All commands are run from the root of the project:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| Command         | Action                                      |
+| :-------------- | :------------------------------------------ |
+| `pnpm dev`      | Starts local dev server at `localhost:4321` |
+| `pnpm build`    | Build your production site to `./dist/`     |
+| `pnpm preview`  | Preview your build locally                  |
+| `pnpm new:post` | Create a new blog post from template        |
