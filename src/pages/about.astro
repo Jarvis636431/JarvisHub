@@ -16,7 +16,7 @@ const timeline = [
     company: "iDesignLab / Tianjin University",
     type: "Student",
     description: "Developed iDesignLab Platform and iDesignLab Website for Lab Managment. Implemented modern CI/CD pipelines.",
-    stack: ["Vue.js", "Three.js", "Tailwind CSS", "React", "TypeScript","Go","Gin","Gorm"]
+    stack: ["Vue.js", "Three.js", "Tailwind CSS", "Astro", "React", "Next.js", "TypeScript",]
   },
   {
     year: "2022",
@@ -26,6 +26,27 @@ const timeline = [
     description: "Bridged the gap between Android and iOS. Created WePeiyang and implemented it in Flutter.",
     stack: ["Figma", "Flutter", "Dart"]
   },
+];
+
+const games = [
+  {
+    name: "Black Myth: Wukong",
+    status: "Playing",
+    progress: 85,
+    desc: "Destined One"
+  },
+  {
+    name: "Cyberpunk 2077",
+    status: "Completed",
+    progress: 100,
+    desc: "Legend of Night City"
+  },
+  {
+    name: "The Legend of Zelda",
+    status: "Eternal",
+    progress: 100,
+    desc: "Hyrule Explorer"
+  }
 ];
 
 const siteOrigin = Astro.site?.origin ?? Astro.url.origin ?? "https://jarvishub.com";
@@ -69,7 +90,7 @@ const structuredData = {
         </h1>
 
         <p class="text-lg text-secondary leading-relaxed max-w-md">
-          I'm Jarvis, a design engineer obsessed with the details. I build interfaces that feel alive, performant, and human.
+          I'm Jarvis, a design engineer and digital explorer. When I'm not crafting pixel-perfect interfaces, you'll find me analyzing game mechanics or getting lost in immersive virtual worlds.
         </p>
 
 
@@ -132,8 +153,41 @@ const structuredData = {
       </div>
     </section>
 
+    <!-- Gaming / Offline Mode -->
+    <section class="animate-in-slide delay-200">
+       <div class="flex items-center gap-4 mb-12">
+        <h2 class="text-xs font-pixel text-secondary uppercase tracking-widest">Offline Mode</h2>
+        <span class="h-px flex-1 bg-black/10"></span>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        {games.map((game) => (
+          <div class="relative group overflow-hidden rounded-xl bg-[#111] border border-white/5 p-6 hover:border-accent-cyan/30 transition-colors">
+            <!-- Background Glow -->
+            <div class="absolute -right-10 -top-10 w-32 h-32 bg-accent-cyan/5 rounded-full blur-3xl group-hover:bg-accent-cyan/10 transition-colors"></div>
+            
+            <div class="relative z-10 flex flex-col h-full justify-between gap-8">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-[10px] font-pixel text-accent-cyan uppercase tracking-wider">{game.status}</span>
+                  <span class="text-xs font-mono text-white/40">{game.progress}%</span>
+                </div>
+                <h3 class="text-lg font-display text-white group-hover:text-accent-cyan transition-colors">{game.name}</h3>
+                <p class="text-sm text-white/50 mt-1">{game.desc}</p>
+              </div>
+              
+              <!-- Progress Bar -->
+              <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                <div class="h-full bg-accent-cyan/80" style={`width: ${game.progress}%`}></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
     <!-- Connect / Footer -->
-    <section class="animate-in-slide delay-200 border-t border-black/10 pt-16 text-center space-y-8">
+    <section class="animate-in-slide delay-300 border-t border-black/10 pt-16 text-center space-y-8">
       <h2 class="text-3xl md:text-4xl font-display">Ready to build something amazing?</h2>
       <div class="flex justify-center gap-6">
         <a href="mailto:hello@jarvishub.com" class="group flex items-center gap-2 text-primary hover:text-accent-cyan transition-colors border-b border-black/10 hover:border-accent-cyan pb-1">

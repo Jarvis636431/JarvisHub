@@ -17,6 +17,9 @@
 
 ## 内容与功能 (Content & Features)
 
+- [ ] **Steam 游戏集成**
+  - 绑定 Steam API，实时展示游戏状态 ("Playing", "Online")。
+  - 获取并展示游戏成就 (Achievements) 和最近游玩记录。
 - [ ] **更多 Bento 卡片类型**
   - "Now Reading/Learning": 展示最近阅读书目或学习技术。
   - "Side Project" Mini App: 嵌入式小工具或游戏 (如贪吃蛇)。
