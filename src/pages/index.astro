@@ -11,7 +11,7 @@ const sortedPosts = postsCollection
   .sort(
     (a, b) =>
       new Date(b.data.publishDate).getTime() -
-      new Date(a.data.publishDate).getTime(),
+      new Date(a.data.publishDate).getTime()
   )
   .slice(0, 4);
 
@@ -23,11 +23,10 @@ const sortedProjects = projectsCollection
   .sort(
     (a, b) =>
       new Date(b.data.publishDate).getTime() -
-      new Date(a.data.publishDate).getTime(),
+      new Date(a.data.publishDate).getTime()
   )
   .filter(({ data }) => data.featured)
   .slice(0, 4);
-
 ---
 
 <Layout title="Jarvis Hub | Command Center">
@@ -63,7 +62,9 @@ const sortedProjects = projectsCollection
   </section>
 
   <section id="projects" class="mb-24">
-    <div class="flex items-end justify-between mb-8 border-b border-black/10 pb-4">
+    <div
+      class="flex items-end justify-between mb-8 border-b border-black/10 pb-4"
+    >
       <div>
         <h2 class="text-3xl md:text-4xl font-display mb-2">Projects</h2>
         <p class="text-secondary text-sm">Selected work</p>
@@ -77,9 +78,7 @@ const sortedProjects = projectsCollection
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {sortedProjects.map((project) => (
-        <ProjectCard project={project} />
-      ))}
+      {sortedProjects.map((project) => <ProjectCard project={project} />)}
     </div>
 
     <div class="mt-6 text-center md:hidden">
@@ -141,7 +140,9 @@ const sortedProjects = projectsCollection
     class="relative overflow-hidden border border-black/10 rounded-2xl py-16 px-6 text-center bg-surface"
   >
     <div class="relative z-10 max-w-2xl mx-auto">
-      <p class="font-mono text-secondary text-sm mb-3 tracking-widest uppercase">
+      <p
+        class="font-mono text-secondary text-sm mb-3 tracking-widest uppercase"
+      >
         Contact
       </p>
       <h2 class="text-4xl md:text-5xl font-display mb-6">
@@ -180,6 +181,6 @@ const sortedProjects = projectsCollection
     }
   }
 
-  // Start typing when page loads
-  window.addEventListener("load", typeWriter);
+  // Start typing immediately
+  typeWriter();
 </script>
