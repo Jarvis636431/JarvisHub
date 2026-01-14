@@ -22,7 +22,7 @@ const link = `/blog/${post.slug}`;
     href={link}
 >
     <div
-        class="flex items-center justify-between gap-4 text-xs font-mono text-secondary"
+        class="flex items-center justify-between gap-4 text-xs font-pixel text-secondary"
     >
         <span>{publishDate}</span>
         <span>{readingTime} min</span>
@@ -45,7 +45,7 @@ const link = `/blog/${post.slug}`;
         post.data.tags.length > 0 && (
             <ul class="flex flex-wrap gap-2 mt-auto pt-3 border-t border-black/5">
                 {post.data.tags.slice(0, 3).map((tag) => (
-                    <li class="px-2 py-1 bg-black/5 text-[11px] text-secondary rounded-full">
+                    <li class="px-2 py-1 bg-black/5 text-[11px] font-pixel text-secondary rounded-full">
                         {tag}
                     </li>
                 ))}

@@ -24,6 +24,13 @@
 - [ ] **彩蛋模式**
   - 根据时间 (如深夜) 自动切换特殊背景 (星空/代码雨)。
 
+## 架构与性能 (Architecture & Performance)
+
+- [ ] **启用 View Transitions**
+  - 使用 Astro `ClientRouter` 实现无刷新页面切换。
+  - 适配现有脚本 (`astro:page-load`)，解决状态重置问题 (如移动端菜单、搜索框)。
+  - 目标：提供原生 App 般的流畅导航体验。
+
 ## 待办任务 (Pending Tasks)
 
 - [ ] **Supabase 配置**
