@@ -366,6 +366,21 @@ const structuredData = seo?.structuredData;
       >
         <div>© 2026 Jarvis Hub</div>
         <div class="flex items-center gap-6">
+          <!-- View Counter -->
+          <div
+            id="footer-view-count"
+            class="flex items-center gap-2 opacity-0 transition-opacity duration-700"
+          >
+            <span class="relative flex h-1.5 w-1.5">
+              <span
+                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-cyan opacity-75"
+              ></span>
+              <span
+                class="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent-cyan"
+              ></span>
+            </span>
+            <span><span id="view-count-value">--</span> Viewers</span>
+          </div>
           <a
             href="https://github.com/Jarvis636431"
             target="_blank"

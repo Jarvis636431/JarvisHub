@@ -204,23 +204,6 @@ const currentYear = new Date().getFullYear();
         >
         </div>
 
-        <!-- View Counter -->
-        <div
-          id="view-count-container"
-          class="absolute top-6 right-6 z-20 flex items-center gap-2 text-secondary/60 bg-white/50 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-mono border border-black/5 opacity-0 transition-opacity duration-700"
-        >
-          <span class="relative flex h-2 w-2">
-            <span
-              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-cyan opacity-75"
-            ></span>
-            <span
-              class="relative inline-flex rounded-full h-2 w-2 bg-accent-cyan"
-            ></span>
-          </span>
-          <span id="view-count">--</span>
-          <span class="hidden md:inline">views</span>
-        </div>
-
         <div class="space-y-8 relative z-10">
           <div class="space-y-4">
             <h1
@@ -563,8 +546,9 @@ const currentYear = new Date().getFullYear();
     if (!supabase) return;
 
     const pageSlug = "home";
-    const viewCountEl = document.getElementById("view-count");
-    const container = document.getElementById("view-count-container");
+    // Updated IDs for Footer location
+    const viewCountEl = document.getElementById("view-count-value");
+    const container = document.getElementById("footer-view-count");
 
     try {
       // Increment view count using RPC
