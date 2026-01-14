@@ -230,73 +230,16 @@ const nextPost =
   <style>
     .blog__content-grid {
       display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 24px;
+      grid-template-columns: minmax(200px, 240px) minmax(0, 1fr);
+      gap: 40px;
       align-items: start;
     }
 
-    .blog__toc {
-      position: sticky;
-      top: 120px;
-      align-self: start;
-      border: 1px solid rgba(31, 31, 31, 0.08);
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 8px 20px rgba(31, 31, 31, 0.04);
-    }
-
-    .blog__toc-title {
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(31, 31, 31, 0.45);
-      margin: 6px 8px 10px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid rgba(31, 31, 31, 0.08);
-    }
-
-    .blog__toc-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      max-height: 60vh;
-      overflow: auto;
-    }
-
-    .blog__toc-item {
-      display: block;
-      padding: 8px 12px;
-      border-left: 2px solid transparent;
-      color: rgba(31, 31, 31, 0.7);
-      text-decoration: none;
-      font-size: 0.95rem;
-      border-radius: 8px;
-      transition: all 0.15s ease;
-    }
-
-    .blog__toc-item::before {
-      content: "•";
-      margin-right: 8px;
-      color: rgba(31, 31, 31, 0.35);
-    }
-
-    .blog__toc-item.active {
-      border-left-color: #2f6f6d;
-      color: #2f6f6d;
-      background: rgba(47, 111, 109, 0.06);
-    }
-
-    .blog__toc-item:focus-visible {
-      outline: 2px solid #2f6f6d;
-      outline-offset: 2px;
-      background: rgba(47, 111, 109, 0.06);
-    }
-
-    .blog__toc-sub {
-      padding-left: 18px;
-      font-size: 0.88rem;
-      color: rgba(31, 31, 31, 0.6);
+    .blog__article {
+      width: 100%;
+      max-width: 720px;
+      justify-self: center;
+      min-width: 0;
     }
 
     .blog__article h2,
@@ -307,10 +250,6 @@ const nextPost =
     @media (max-width: 720px) {
       .blog__content-grid {
         grid-template-columns: 1fr;
-      }
-      .blog__toc {
-        position: static;
-        top: auto;
       }
     }
   </style>
