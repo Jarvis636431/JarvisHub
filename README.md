@@ -1,13 +1,22 @@
 # Jarvis Hub
 
-A modern, high-performance personal portfolio and digital garden built with [Astro](https://astro.build). Designed for speed, clarity, and ease of content management.
+A modern, high-performance personal portfolio and digital garden built with [Astro](https://astro.build). Designed for speed, clarity, and ease of content management, featuring a responsive **Bento Grid** layout and rich interactive elements.
 
 ## ✨ Features
 
 - **Framework**: Built on Astro v5 for lightning-fast performance (Islands Architecture).
 - **Styling**: Tailwind CSS for a utility-first, responsive design system.
+- **Design System**: 
+  - **Bento Grid Layout**: Responsive, grid-based card layout.
+  - **Spotlight Effect**: Mouse-tracking radial gradient spotlight.
+  - **Staggered Animations**: Smooth entrance animations for cards.
+  - **Infinite Marquee**: Seamless scrolling tech stack display.
+- **Dynamic Content**:
+  - **GitHub Heatmap**: Real-time contribution graph with dynamic year tracking.
+  - **Music/Vibe Card**: Spotify-style animated music visualizer.
+  - **Supabase Integration**: Real-time page view counting.
 - **Content**: Type-safe content management using Astro Content Collections (MDX & Markdown).
-- **Search**: Integrated client-side fuzzy search with Fuse.js.
+- **Search**: Integrated client-side fuzzy search with Fuse.js (CMD+K support).
 - **Automation**: Custom CLI scripts for generating new content templates.
 - **Deployment**: Optimized for Vercel.
 
@@ -21,6 +30,15 @@ This project uses [pnpm](https://pnpm.io/) as the package manager.
 git clone https://github.com/yourusername/JarvisHub.git
 cd JarvisHub
 pnpm install
+```
+
+### Environment Variables
+
+Create a `.env` file in the root directory and add your Supabase credentials (required for the view counter):
+
+```ini
+PUBLIC_SUPABASE_URL=your_supabase_project_url
+PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### Development
@@ -81,9 +99,10 @@ Schema fields defined in `src/content/config.ts`:
 ├── public/            # Static assets (images, favicon)
 ├── scripts/           # Automation scripts (new-post.js)
 ├── src/
-│   ├── components/    # Reusable UI components (BlogCard, ProjectCard, etc.)
+│   ├── components/    # Reusable UI components (BlogCard, ProjectCard, Search, etc.)
 │   ├── content/       # MDX/Markdown content sources
 │   ├── layouts/       # Page layouts
+│   ├── lib/           # Utility libraries (supabase.ts)
 │   ├── pages/         # Astro routes and pages
 │   └── styles/        # Global styles
 ├── astro.config.mjs   # Astro configuration
