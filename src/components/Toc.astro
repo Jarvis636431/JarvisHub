@@ -1,29 +1,17 @@
 ---
-const {
-  prefix,
-  articleId,
-  tocId,
-  title = "目录",
-  ariaLabel,
-} = Astro.props;
+const { prefix, articleId, tocId, title = "", ariaLabel } = Astro.props;
 
 const tocClass = `${prefix}__toc`;
-const titleClass = `${prefix}__toc-title`;
 const listClass = `${prefix}__toc-list`;
 const itemClass = `${prefix}__toc-item`;
-const subClass = `${prefix}__toc-sub`;
 ---
 
 <aside class={tocClass}>
-  <div class={titleClass}>{title}</div>
-  <nav
-    id={tocId}
-    class={listClass}
-    aria-label={ariaLabel}
-  ></nav>
+  {title && <div class={`${prefix}__toc-title`}>{title}</div>}
+  <nav id={tocId} class={listClass} aria-label={ariaLabel}></nav>
 </aside>
 
-<script is:inline define:vars={{ articleId, tocId, itemClass, subClass }}>
+<script is:inline define:vars={{ articleId, tocId, itemClass }}>
   const runToc = () => {
     const article = document.getElementById(articleId);
     const toc = document.getElementById(tocId);
@@ -40,14 +28,13 @@ const subClass = `${prefix}__toc-sub`;
         const text = h.textContent || "";
         const id = h.id || slugify(text);
         if (!h.id) h.id = id;
-        const depth =
-          h.tagName === "H1" ? 1 : h.tagName === "H2" ? 2 : 3;
+        const depth = h.tagName === "H1" ? 1 : h.tagName === "H2" ? 2 : 3;
         items.push({ id, depth, text });
       });
       const html = items
         .map(
           (i) =>
-            `<a href="#${i.id}" class="${itemClass} ${i.depth === 3 ? subClass : ""}" data-id="${i.id}">${i.text}</a>`
+            `<a href="#${i.id}" class="${itemClass} toc-depth-${i.depth}" data-id="${i.id}">${i.text}</a>`
         )
         .join("");
       toc.innerHTML = html;
@@ -113,8 +100,8 @@ const subClass = `${prefix}__toc-sub`;
     overflow: auto;
   }
 
-  .blog__toc-item,
-  .project__toc-item {
+  .blog__toc .blog__toc-item,
+  .project__toc .project__toc-item {
     display: block;
     padding: 8px 12px;
     border-left: 2px solid transparent;
@@ -125,30 +112,42 @@ const subClass = `${prefix}__toc-sub`;
     transition: all 0.15s ease;
   }
 
-  .blog__toc-item::before,
-  .project__toc-item::before {
+  .blog__toc .blog__toc-item::before,
+  .project__toc .project__toc-item::before {
     content: "•";
     margin-right: 8px;
     color: rgba(31, 31, 31, 0.35);
   }
 
-  .blog__toc-item.active,
-  .project__toc-item.active {
+  .blog__toc .blog__toc-item.active,
+  .project__toc .project__toc-item.active {
     border-left-color: #2f6f6d;
     color: #2f6f6d;
     background: rgba(47, 111, 109, 0.06);
   }
 
-  .blog__toc-item:focus-visible,
-  .project__toc-item:focus-visible {
+  .blog__toc .blog__toc-item:focus-visible,
+  .project__toc .project__toc-item:focus-visible {
     outline: 2px solid #2f6f6d;
     outline-offset: 2px;
     background: rgba(47, 111, 109, 0.06);
   }
 
-  .blog__toc-sub,
-  .project__toc-sub {
-    padding-left: 18px;
+  :global(.blog__toc .toc-depth-1),
+  :global(.project__toc .toc-depth-1) {
+    font-weight: 600;
+  }
+
+  :global(.blog__toc .toc-depth-2),
+  :global(.project__toc .toc-depth-2) {
+    padding-left: 12px;
+    font-size: 0.92rem;
+    color: rgba(31, 31, 31, 0.65);
+  }
+
+  :global(.blog__toc .toc-depth-3),
+  :global(.project__toc .toc-depth-3) {
+    padding-left: 20px;
     font-size: 0.88rem;
     color: rgba(31, 31, 31, 0.6);
   }
@@ -161,3 +160,4 @@ const subClass = `${prefix}__toc-sub`;
     }
   }
 </style>
+<!-- Astro 组件的 scoped <style> 不会匹配运行时插入的元素（例如 JS 动态生成的目录项），这些元素没有组件作用域标记，导致样式失效。解决方式：用 :global(...) 限定父容器，或直接用 Tailwind/全局样式。 -->
