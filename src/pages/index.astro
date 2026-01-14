@@ -30,133 +30,169 @@ const sortedProjects = projectsCollection
 ---
 
 <Layout title="Jarvis Hub | Command Center">
-  <section id="hero" class="py-20 md:py-28">
-    <div class="max-w-3xl space-y-6">
-      <p class="text-sm uppercase tracking-widest text-secondary font-mono">
-        Jarvis Hub
-      </p>
-      <h1 class="text-4xl md:text-6xl font-display leading-tight">
-        Calm, durable interfaces for modern digital products.
-      </h1>
-      <p
-        id="hero-typewriter"
-        class="text-lg text-secondary leading-relaxed font-mono min-h-[72px]"
+  <!-- Hero Section -->
+  <section id="hero" class="relative py-32 md:py-48 overflow-hidden">
+    <!-- Decorative background blob -->
+    <div
+      class="absolute -top-24 -right-24 w-96 h-96 bg-accent-cyan/10 rounded-full blur-3xl -z-10"
+    >
+    </div>
+
+    <div class="max-w-4xl space-y-8">
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-cyan/5 border border-accent-cyan/20 text-accent-cyan text-xs font-mono tracking-wider uppercase"
       >
-        {/* Text will be injected via JS */}
-      </p>
-      <div class="flex flex-wrap gap-4">
+        <span class="relative flex h-2 w-2">
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-cyan opacity-75"
+          ></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-accent-cyan"
+          ></span>
+        </span>
+        Available for hire
+      </div>
+
+      <h1 class="text-5xl md:text-7xl font-display font-bold leading-[1.1]">
+        Calm, durable interfaces for <span
+          class="text-transparent bg-clip-text bg-gradient-to-r from-accent-cyan to-accent-violet"
+          >modern digital products</span
+        >.
+      </h1>
+
+      <div class="max-w-2xl">
+        <p
+          id="hero-typewriter"
+          class="text-xl md:text-2xl text-secondary font-body leading-relaxed min-h-[96px]"
+        >
+          {/* Text will be injected via JS */}
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4 pt-4">
         <a
           href="#projects"
-          class="px-5 py-2.5 bg-primary text-background rounded-full text-sm font-medium hover:bg-accent-cyan hover:text-white transition-colors"
+          class="px-8 py-4 bg-primary text-background rounded-full text-base font-medium hover:bg-accent-cyan hover:shadow-lg hover:shadow-accent-cyan/25 transition-all duration-300 transform hover:-translate-y-1"
         >
           View projects
         </a>
         <a
           href="/blog"
-          class="px-5 py-2.5 border border-black/15 text-primary rounded-full text-sm font-medium hover:border-accent-cyan hover:text-accent-cyan transition-colors"
+          class="group px-8 py-4 bg-white border border-black/10 text-primary rounded-full text-base font-medium hover:border-accent-cyan/50 hover:text-accent-cyan transition-all duration-300"
         >
           Read writing
+          <span
+            class="inline-block ml-1 transition-transform group-hover:translate-x-1"
+            >→</span
+          >
         </a>
       </div>
     </div>
   </section>
 
-  <section id="projects" class="mb-24">
-    <div
-      class="flex items-end justify-between mb-8 border-b border-black/10 pb-4"
-    >
-      <div>
-        <h2 class="text-3xl md:text-4xl font-display mb-2">Projects</h2>
-        <p class="text-secondary text-sm">Selected work</p>
+  <!-- Projects Section -->
+  <section id="projects" class="py-24 border-t border-black/5">
+    <div class="flex items-end justify-between mb-12">
+      <div class="space-y-4">
+        <h2 class="text-4xl font-display font-bold">Selected Work</h2>
+        <p class="text-lg text-secondary font-body max-w-xl">
+          A collection of digital products, design systems, and experiments
+          built with care.
+        </p>
       </div>
       <a
         href="/projects"
-        class="hidden md:flex items-center gap-2 text-accent-cyan text-sm hover:text-primary transition-colors"
+        class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full hover:bg-black/5 transition-colors text-sm font-medium"
       >
-        View all
+        View all projects
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+            clip-rule="evenodd"></path>
+        </svg>
       </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       {sortedProjects.map((project) => <ProjectCard project={project} />)}
     </div>
 
-    <div class="mt-6 text-center md:hidden">
+    <div class="mt-12 text-center md:hidden">
       <a
         href="/projects"
-        class="inline-block px-5 py-2 border border-black/10 text-accent-cyan text-sm rounded-full hover:border-accent-cyan transition-colors"
+        class="inline-block px-6 py-3 border border-black/10 text-primary text-sm font-medium rounded-full hover:bg-black/5 transition-colors"
       >
-        View all
+        View all projects
       </a>
     </div>
   </section>
 
-  <section id="writing" class="mb-24">
-    <div class="grid md:grid-cols-12 gap-10">
-      <div class="md:col-span-4">
-        <h2 class="text-3xl font-display mb-4">Writing</h2>
-        <p class="text-secondary mb-6">
-          Essays and practical notes on design systems and product work.
+  <!-- Writing Section -->
+  <section id="writing" class="py-24 border-t border-black/5">
+    <div class="grid md:grid-cols-12 gap-12">
+      <div class="md:col-span-4 space-y-6">
+        <h2 class="text-4xl font-display font-bold">Writing</h2>
+        <p class="text-lg text-secondary font-body leading-relaxed">
+          Essays and practical notes on design systems, engineering patterns,
+          and product strategy.
         </p>
         <a
           href="/blog"
-          class="inline-flex items-center gap-2 text-sm text-accent-cyan hover:text-primary transition-colors"
+          class="inline-flex items-center gap-2 text-accent-cyan font-medium hover:text-primary transition-colors border-b border-accent-cyan/30 hover:border-primary pb-0.5"
         >
           View archive
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"></path>
+          </svg>
         </a>
       </div>
 
       <div class="md:col-span-8">
-        <div class="space-y-2 text-sm">
+        <div class="flex flex-col">
           {
-            sortedPosts.map((post, i) => (
+            sortedPosts.map((post) => (
               <a
                 href={`/blog/${post.slug}`}
-                class="group flex items-center gap-4 p-4 border-b border-black/5 hover:bg-black/5 transition-colors"
+                class="group flex items-baseline gap-6 py-6 border-b border-black/5 hover:border-accent-cyan/30 transition-colors"
               >
-                <span class="text-secondary/60 font-mono">0{i + 1}</span>
-                <div class="flex-1">
-                  <h3 class="text-primary group-hover:text-accent-cyan transition-colors truncate">
-                    {post.data.title}
-                  </h3>
-                </div>
-                <span class="text-secondary/60 text-xs whitespace-nowrap hidden sm:block">
+                <span class="text-secondary/60 font-mono text-sm whitespace-nowrap min-w-[100px]">
                   {new Date(post.data.publishDate).toLocaleDateString("en-US", {
-                    month: "2-digit",
+                    month: "short",
                     day: "2-digit",
                     year: "numeric",
                   })}
+                </span>
+                <div class="flex-1">
+                  <h3 class="text-xl font-display font-medium text-primary group-hover:text-accent-cyan transition-colors">
+                    {post.data.title}
+                  </h3>
+                  {post.data.description && (
+                    <p class="mt-2 text-secondary font-body text-sm line-clamp-1 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 duration-300">
+                      {post.data.description}
+                    </p>
+                  )}
+                </div>
+                <span class="text-accent-cyan opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                  →
                 </span>
               </a>
             ))
           }
         </div>
       </div>
-    </div>
-  </section>
-
-  <section
-    id="contact"
-    class="relative overflow-hidden border border-black/10 rounded-2xl py-16 px-6 text-center bg-surface"
-  >
-    <div class="relative z-10 max-w-2xl mx-auto">
-      <p
-        class="font-mono text-secondary text-sm mb-3 tracking-widest uppercase"
-      >
-        Contact
-      </p>
-      <h2 class="text-4xl md:text-5xl font-display mb-6">
-        Let's build something simple and effective.
-      </h2>
-      <p class="text-lg text-secondary mb-8">
-        Open to collaborations, product strategy, and design system work.
-      </p>
-      <a
-        href="mailto:hello@jarvishub.com"
-        class="inline-block px-8 py-3 bg-primary text-background text-sm font-medium rounded-full hover:bg-accent-cyan hover:text-white transition-colors"
-      >
-        Email me
-      </a>
     </div>
   </section>
 </Layout>
