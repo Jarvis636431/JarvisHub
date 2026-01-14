@@ -1,5 +1,6 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import Toc from "@components/Toc.astro";
 import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 
@@ -158,10 +159,7 @@ const nextPost =
 
     <section>
       <div class="blog__content-grid">
-        <aside class="blog__toc">
-          <div class="blog__toc-title">目录</div>
-          <nav id="blog-toc" class="blog__toc-list"></nav>
-        </aside>
+        <Toc prefix="blog" articleId="blog-article" tocId="blog-toc" />
         <div class="blog__article" id="blog-article">
           <div class="prose-pixel">
             <Content />
@@ -305,50 +303,4 @@ const nextPost =
       }
     }
   </style>
-  <script>
-    const articleEl = document.getElementById("blog-article");
-    const tocEl = document.getElementById("blog-toc");
-    if (articleEl && tocEl) {
-      const headings = Array.from(articleEl.querySelectorAll("h2, h3"));
-      const slugify = (s) =>
-        s
-          .toLowerCase()
-          .trim()
-          .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
-          .replace(/^-+|-+$/g, "");
-      const items = [];
-      headings.forEach((h) => {
-        const text = h.textContent || "";
-        const id = h.id || slugify(text);
-        if (!h.id) h.id = id;
-        items.push({ id, depth: h.tagName === "H2" ? 2 : 3, text });
-      });
-      const html = items
-        .map(
-          (i) =>
-            `<a href="#${i.id}" class="blog__toc-item ${i.depth === 3 ? "blog__toc-sub" : ""}" data-id="${i.id}">${i.text}</a>`
-        )
-        .join("");
-      tocEl.innerHTML = html;
-      const links = Array.from(tocEl.querySelectorAll(".blog__toc-item"));
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            const id = entry.target.id;
-            const link = tocEl.querySelector(
-              `.blog__toc-item[data-id="${id}"]`
-            );
-            if (link) {
-              if (entry.isIntersecting) {
-                links.forEach((l) => l.classList.remove("active"));
-                link.classList.add("active");
-              }
-            }
-          });
-        },
-        { rootMargin: "0px 0px -60% 0px", threshold: 0.1 }
-      );
-      headings.forEach((h) => observer.observe(h));
-    }
-  </script>
 </Layout>

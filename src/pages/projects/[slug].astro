@@ -1,5 +1,6 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import Toc from "@components/Toc.astro";
 import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 
@@ -163,10 +164,12 @@ const nextProject =
 
     <section class="project__content">
       <div class="project__content-grid">
-        <aside class="project__toc">
-          <div class="project__toc-title">目录</div>
-          <nav id="project-toc" class="project__toc-list" aria-label="On-page navigation"></nav>
-        </aside>
+        <Toc
+          prefix="project"
+          articleId="project-article"
+          tocId="project-toc"
+          ariaLabel="On-page navigation"
+        />
         <div class="project__article" id="project-article">
           <div class="prose-pixel">
             <Content />
@@ -458,44 +461,3 @@ const nextProject =
     }
   }
 </style>
-
-<script>
-  const article = document.getElementById("project-article");
-  const toc = document.getElementById("project-toc");
-  if (article && toc) {
-    const headings = Array.from(article.querySelectorAll("h2, h3"));
-    const slugify = (s) => s.toLowerCase().trim().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
-    const items = [];
-    headings.forEach((h) => {
-      const text = h.textContent || "";
-      const id = h.id || slugify(text);
-      if (!h.id) h.id = id;
-      items.push({ id, depth: h.tagName === "H2" ? 2 : 3, text });
-    });
-    const html = items
-      .map((i) => `<a href="#${i.id}" class="project__toc-item ${i.depth === 3 ? "project__toc-sub" : ""}" data-id="${i.id}">${i.text}</a>`)
-      .join("");
-    toc.innerHTML = html;
-    const links = Array.from(toc.querySelectorAll(".project__toc-item"));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const id = entry.target.id;
-          const link = toc.querySelector(`.project__toc-item[data-id="${id}"]`);
-          if (link) {
-            if (entry.isIntersecting) {
-              links.forEach((l) => {
-                l.classList.remove("active");
-                l.removeAttribute("aria-current");
-              });
-              link.classList.add("active");
-              link.setAttribute("aria-current", "true");
-            }
-          }
-        });
-      },
-      { rootMargin: "0px 0px -60% 0px", threshold: 0.1 }
-    );
-    headings.forEach((h) => observer.observe(h));
-  }
-</script>
