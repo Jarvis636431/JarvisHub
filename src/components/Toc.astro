@@ -1,13 +1,14 @@
 ---
 const { prefix, articleId, tocId, title = "", ariaLabel } = Astro.props;
 
-const tocClass = `${prefix}__toc`;
-const listClass = `${prefix}__toc-list`;
-const itemClass = `${prefix}__toc-item`;
+const tocClass = `${prefix}__toc detail__toc`;
+const titleClass = `${prefix}__toc-title detail__toc-title`;
+const listClass = `${prefix}__toc-list detail__toc-list`;
+const itemClass = `${prefix}__toc-item detail__toc-item`;
 ---
 
 <aside class={tocClass}>
-  {title && <div class={`${prefix}__toc-title`}>{title}</div>}
+  {title && <div class={titleClass}>{title}</div>}
   <nav id={tocId} class={listClass} aria-label={ariaLabel}></nav>
 </aside>
 
@@ -68,89 +69,82 @@ const itemClass = `${prefix}__toc-item`;
 </script>
 
 <style>
-  .blog__toc,
-  .project__toc {
+  :global(.detail__toc) {
     position: sticky;
     top: 120px;
     align-self: start;
-    padding: 12px;
+    padding: 16px;
+    border: 1px solid rgba(31, 31, 31, 0.08);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(31, 31, 31, 0.05);
   }
 
-  .blog__toc-title,
-  .project__toc-title {
+  :global(.detail__toc-title) {
     font-size: 0.8rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(31, 31, 31, 0.45);
+    color: rgba(31, 31, 31, 0.5);
     margin: 6px 8px 10px;
     padding-bottom: 8px;
     border-bottom: 1px solid rgba(31, 31, 31, 0.08);
   }
 
-  .blog__toc-list,
-  .project__toc-list {
+  :global(.detail__toc-list) {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     max-height: 60vh;
     overflow: auto;
   }
 
-  .blog__toc .blog__toc-item,
-  .project__toc .project__toc-item {
+  :global(.detail__toc-item) {
     display: block;
     padding: 8px 12px;
     border-left: 2px solid transparent;
-    color: rgba(31, 31, 31, 0.7);
+    color: rgba(31, 31, 31, 0.72);
     text-decoration: none;
     font-size: 0.95rem;
     border-radius: 8px;
     transition: all 0.15s ease;
   }
 
-  .blog__toc .blog__toc-item::before,
-  .project__toc .project__toc-item::before {
+  :global(.detail__toc-item::before) {
     content: "•";
     margin-right: 8px;
     color: rgba(31, 31, 31, 0.35);
   }
 
-  .blog__toc .blog__toc-item.active,
-  .project__toc .project__toc-item.active {
+  :global(.detail__toc-item.active) {
     border-left-color: #2f6f6d;
     color: #2f6f6d;
     background: rgba(47, 111, 109, 0.06);
   }
 
-  .blog__toc .blog__toc-item:focus-visible,
-  .project__toc .project__toc-item:focus-visible {
+  :global(.detail__toc-item:focus-visible) {
     outline: 2px solid #2f6f6d;
     outline-offset: 2px;
     background: rgba(47, 111, 109, 0.06);
   }
 
-  :global(.blog__toc .toc-depth-1),
-  :global(.project__toc .toc-depth-1) {
+  :global(.detail__toc .toc-depth-1) {
     font-weight: 600;
   }
 
-  :global(.blog__toc .toc-depth-2),
-  :global(.project__toc .toc-depth-2) {
+  :global(.detail__toc .toc-depth-2) {
     padding-left: 12px;
     font-size: 0.92rem;
     color: rgba(31, 31, 31, 0.65);
   }
 
-  :global(.blog__toc .toc-depth-3),
-  :global(.project__toc .toc-depth-3) {
+  :global(.detail__toc .toc-depth-3) {
     padding-left: 20px;
     font-size: 0.88rem;
     color: rgba(31, 31, 31, 0.6);
   }
 
   @media (max-width: 720px) {
-    .blog__toc,
-    .project__toc {
+    :global(.detail__toc) {
       position: static;
       top: auto;
     }

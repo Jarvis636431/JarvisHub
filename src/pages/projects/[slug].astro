@@ -110,11 +110,16 @@ const nextProject =
   }}
 >
   <article class="project">
-    <header class="project__hero">
-      <a class="project__breadcrumb" href="/projects">← Back to all projects</a>
+    <header class="project__hero bg-surface/80 border border-black/5 rounded-2xl p-8 md:p-10">
+      <a
+        class="project__breadcrumb text-sm text-secondary hover:text-primary transition-colors"
+        href="/projects"
+      >
+        ← Back to all projects
+      </a>
       <div class="project__hero-grid">
         <div class="project__hero-left">
-          <div class="project__meta">
+          <div class="project__meta text-sm text-secondary">
             <span class={`status status--${project.data.status}`}>{project.data.status}</span>
             <span>{publishDate}</span>
             {updatedDate && (
@@ -125,7 +130,7 @@ const nextProject =
             )}
           </div>
           <h1>{project.data.title}</h1>
-          <p class="project__summary">{project.data.summary}</p>
+          <p class="project__summary text-secondary">{project.data.summary}</p>
           <div class="project__details">
             {project.data.roles.length > 0 && (
               <div>
@@ -142,7 +147,12 @@ const nextProject =
             {project.data.externalUrl && (
               <div>
                 <h2>Live</h2>
-                <a class="project__link" href={project.data.externalUrl} target="_blank" rel="noreferrer">
+                <a
+                  class="project__link text-primary hover:text-accent-cyan transition-colors"
+                  href={project.data.externalUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Visit project ↗
                 </a>
               </div>
@@ -163,7 +173,9 @@ const nextProject =
     </header>
 
     <section class="project__content">
-      <div class="project__content-grid">
+      <div
+        class="project__content-grid grid gap-10 items-start lg:grid-cols-[minmax(220px,240px)_minmax(0,1fr)]"
+      >
         <Toc
           prefix="project"
           articleId="project-article"
@@ -257,22 +269,10 @@ const nextProject =
     align-items: flex-end;
   }
 
-  .project__breadcrumb {
-    color: rgba(107, 107, 107, 0.9);
-    text-decoration: none;
-    font-size: 0.95rem;
-  }
-
-  .project__breadcrumb:hover {
-    color: #1f1f1f;
-  }
-
   .project__meta {
     display: flex;
     gap: 10px;
     align-items: center;
-    color: rgba(107, 107, 107, 0.9);
-    font-size: 0.9rem;
   }
 
   .project__hero h1 {
@@ -284,7 +284,6 @@ const nextProject =
     margin: 0;
     font-size: 1.1rem;
     line-height: 1.7;
-    color: rgba(107, 107, 107, 0.95);
     max-width: 720px;
   }
 
@@ -305,12 +304,7 @@ const nextProject =
   .project__details p,
   .project__link {
     margin: 0;
-    color: rgba(31, 31, 31, 0.9);
     text-decoration: none;
-  }
-
-  .project__link:hover {
-    color: #2f6f6d;
   }
 
   .project__cover {
@@ -329,79 +323,9 @@ const nextProject =
     gap: 18px;
   }
 
-  .project__content-grid {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 24px;
-    align-items: start;
-  }
-
-  .project__toc {
-    position: sticky;
-    top: 120px;
-    align-self: start;
-    border: 1px solid rgba(31, 31, 31, 0.08);
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 12px;
-    padding: 12px;
-    box-shadow: 0 8px 20px rgba(31, 31, 31, 0.04);
-  }
-
-  .project__toc-title {
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(31, 31, 31, 0.45);
-    margin: 6px 8px 10px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(31, 31, 31, 0.08);
-  }
-
-  .project__toc-list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    max-height: 60vh;
-    overflow: auto;
-  }
-
-  .project__toc-item {
-    display: block;
-    padding: 8px 12px;
-    border-left: 2px solid transparent;
-    color: rgba(31, 31, 31, 0.7);
-    text-decoration: none;
-    font-size: 0.95rem;
-    border-radius: 8px;
-    transition: all 0.15s ease;
-  }
-
-  .project__toc-item::before {
-    content: "•";
-    margin-right: 8px;
-    color: rgba(31, 31, 31, 0.35);
-  }
-
-  .project__toc-item.active {
-    border-left-color: #2f6f6d;
-    color: #2f6f6d;
-    background: rgba(47, 111, 109, 0.06);
-  }
-
-  .project__toc-item:focus-visible {
-    outline: 2px solid #2f6f6d;
-    outline-offset: 2px;
-    background: rgba(47, 111, 109, 0.06);
-  }
-
-  .project__toc-sub {
-    padding-left: 18px;
-    font-size: 0.88rem;
-    color: rgba(31, 31, 31, 0.6);
-  }
-
   .project__article {
     min-width: 0;
+    max-width: 760px;
   }
 
   .project__article h2,
@@ -449,15 +373,6 @@ const nextProject =
 
     .project__details {
       grid-template-columns: 1fr;
-    }
-
-    .project__content-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .project__toc {
-      position: static;
-      top: auto;
     }
   }
 </style>
